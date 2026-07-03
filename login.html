@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Admin login — Ker Properties." />
+  <title>Admin Login | Ker Properties</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.44.0/dist/tabler-icons.min.css" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ── Animated background orbs ── */
+    .login-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      animation: orbFloat 8s ease-in-out infinite alternate;
+    }
+    .login-orb--1 { width: 420px; height: 420px; background: rgba(91,45,142,0.35); top: -100px; left: -100px; animation-duration: 9s; }
+    .login-orb--2 { width: 300px; height: 300px; background: rgba(123,47,190,0.25); bottom: -80px; right: -80px; animation-duration: 7s; animation-delay: -3s; }
+    .login-orb--3 { width: 200px; height: 200px; background: rgba(58,8,112,0.30); top: 50%; right: 20%; animation-duration: 11s; animation-delay: -5s; }
+    @keyframes orbFloat {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(30px,-30px) scale(1.08); }
+    }
+
+    /* ── Grid pattern ── */
+    .login-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(91,45,142,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(91,45,142,0.06) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+    }
+
+    /* ── Password toggle ── */
+    .input-wrap { position: relative; }
+    .input-wrap input { padding-right: 2.75rem; }
+    .pw-toggle {
+      position: absolute; right: 0.85rem; top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none;
+      color: var(--text-muted); cursor: pointer; padding: 0;
+      font-size: 1rem; transition: color var(--transition); line-height: 1;
+    }
+    .pw-toggle:hover { color: var(--purple); }
+
+    /* ── Divider ── */
+    .login-divider {
+      display: flex; align-items: center; gap: 0.75rem;
+      margin: 1.25rem 0;
+      font-size: 0.75rem; color: var(--text-muted);
+    }
+    .login-divider::before, .login-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--silver-light);
+    }
+
+    /* ── Forgot password link ── */
+    .forgot-link {
+      display: block;
+      text-align: right;
+      font-size: 0.8rem;
+      color: var(--purple);
+      cursor: pointer;
+      margin-top: -0.65rem;
+      margin-bottom: 1.15rem;
+      text-decoration: none;
+      transition: opacity var(--transition);
+    }
+    .forgot-link:hover { opacity: 0.75; }
+
+    /* ── Reset panel ── */
+    .reset-panel {
+      display: none;
+      background: var(--purple-pale);
+      border: 1px solid rgba(91,45,142,0.18);
+      border-radius: var(--radius-md);
+      padding: 1.35rem;
+      margin-bottom: 1.35rem;
+    }
+    .reset-panel h4 {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.35rem;
+    }
+    .reset-panel p {
+      font-size: 0.78rem;
+      color: var(--text-mid);
+      margin-bottom: 1rem;
+      line-height: 1.55;
+    }
+
+    /* ── Back to site ── */
+    .back-to-site {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.83rem; color: var(--text-muted);
+      margin-top: 1.5rem; transition: color var(--transition);
+      text-decoration: none; justify-content: center; width: 100%;
+    }
+    .back-to-site:hover { color: var(--purple); }
+
+    /* ── OTP input ── */
+    #reset-otp {
+      font-size: 1.4rem;
+      letter-spacing: 0.35em;
+      text-align: center;
+      font-weight: 700;
+      color: var(--purple-deep);
+    }
+    #reset-otp::placeholder { font-size: .8rem; letter-spacing: 0; font-weight: 400; color: var(--text-muted); }
+
+    /* ── Security note ── */
+    .security-note {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      background: rgba(91,45,142,0.06);
+      border: 1px solid rgba(91,45,142,0.12);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.35rem;
+      font-size: 0.78rem;
+      color: var(--text-mid);
+      line-height: 1.55;
+    }
+    .security-note i { color: var(--purple); font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+  </style>
+</head>
+<body>
+
+  
+  <header class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <a href="index.html" class="navbar__logo">
+        <img src="kpLogo-icon.png" alt="Ker Properties Logo" />
+        <div class="logo-wordmark">
+          <span class="logo-text">Ker</span>
+          <span class="logo-sub">Properties</span>
+        </div>
+      </a>
+
+      <nav class="navbar__links" id="navLinks">
+        <a href="index.html"       class="nav-link">Home</a>
+        <a href="properties.html"  class="nav-link">Properties</a>
+        <a href="about.html"       class="nav-link">About</a>
+        <a href="contact.html"     class="nav-link">Contact</a>
+        <a href="testimonies.html" class="nav-link">Testimonies</a>
+      </nav>
+
+      <div class="navbar__actions">
+        <a href="cart.html" class="btn btn--ghost cart-btn" title="Enquiry List">
+          <i class="ti ti-shopping-cart"></i>
+          <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+        </a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  
+  <main class="login-page">
+
+    <div class="login-grid"></div>
+    <div class="login-orb login-orb--1"></div>
+    <div class="login-orb login-orb--2"></div>
+    <div class="login-orb login-orb--3"></div>
+
+    <div class="login-card fade-in">
+
+      
+      <div class="login-card__logo">
+        <img src="kpLogo.png" alt="Ker Properties" />
+      </div>
+
+      <h1 class="login-card__heading">Admin Login</h1>
+      <p class="login-card__sub">
+        Authorised personnel only. Sign in to manage listings and view enquiries.
+      </p>
+
+      <div class="security-note">
+        <i class="ti ti-shield-lock"></i>
+        <span>Authorised personnel only.</span>
+      </div>
+
+      
+      <form id="loginForm" novalidate>
+
+        <div class="form-group">
+          <label for="lusername">
+            <i class="ti ti-mail" style="font-size:.85rem;margin-right:4px"></i>
+            Admin Email <span class="req">*</span>
+          </label>
+          <input
+            type="email"
+            id="lusername"
+            name="username"
+            placeholder="admin@email.com"
+            autocomplete="username"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="lpassword">
+            <i class="ti ti-lock" style="font-size:.85rem;margin-right:4px"></i>
+            Password <span class="req">*</span>
+          </label>
+          <div class="input-wrap">
+            <input
+              type="password"
+              id="lpassword"
+              name="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            />
+            <button type="button" class="pw-toggle" id="pwToggle" aria-label="Toggle password">
+              <i class="ti ti-eye" id="pwToggleIcon"></i>
+            </button>
+          </div>
+        </div>
+
+        
+        <a class="forgot-link" id="forgotLink">Forgot password?</a>
+
+        
+        <div class="form-status" id="loginStatus" style="margin-bottom:.85rem"></div>
+
+        <button type="submit" class="btn btn--primary btn--full" id="loginBtn">
+          <i class="ti ti-login"></i> Sign In
+        </button>
+      </form>
+
+      
+      <div class="reset-panel" id="resetPanel">
+        <h4><i class="ti ti-key" style="color:var(--purple);margin-right:6px"></i>Reset Password</h4>
+
+        <div id="resetStep1">
+          <p style="font-size:.82rem;color:var(--text-mid);margin-bottom:1rem;line-height:1.6">
+            Enter your admin account email and we'll send you a secure link to set a new password.
+          </p>
+          <div class="form-group">
+            <label for="reset-contact">Account Email <span class="req">*</span></label>
+            <input
+              type="email"
+              id="reset-contact"
+              placeholder="admin@email.com"
+            />
+          </div>
+          <div class="form-status" id="resetStatus" style="margin-bottom:.75rem"></div>
+          <div style="display:flex;gap:.75rem">
+            <button type="button" class="btn btn--primary" id="sendOtpBtn" style="flex:1;justify-content:center">
+              <i class="ti ti-send"></i> Send Reset Link
+            </button>
+            <button type="button" class="btn btn--outline" id="cancelReset" style="justify-content:center">
+              Cancel
+            </button>
+          </div>
+        </div>
+
+        <div id="resetStep2" style="display:none"></div>
+      </div>
+
+      <div class="login-divider">or</div>
+
+      <a href="index.html" class="back-to-site">
+        <i class="ti ti-arrow-left"></i> Back to main site
+      </a>
+
+    </div>
+  </main>
+
+  
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div class="footer__brand">
+        <a href="index.html" class="footer__logo">
+          <img src="kpLogo-icon-white.png" alt="Ker Properties" />
+          <div class="logo-wordmark">
+            <span class="logo-text">Ker</span>
+            <span class="logo-sub">Properties</span>
+          </div>
+        </a>
+        <p class="footer__desc">
+          Trusted real estate services across all districts of Uganda.
+          Your property journey starts here.
+        </p>
+        <div class="footer__socials">
+          <a href="https://facebook.com/YOUR_PAGE" target="_blank" rel="noopener"
+             class="social-link" aria-label="Facebook"><i class="ti ti-brand-facebook"></i></a>
+          <a href="https://wa.me/2567XXXXXXXX" target="_blank" rel="noopener"
+             class="social-link" aria-label="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>
+          <a href="https://instagram.com/YOUR_HANDLE" target="_blank" rel="noopener"
+             class="social-link" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+          <a href="https://linkedin.com/company/YOUR_PAGE" target="_blank" rel="noopener"
+             class="social-link" aria-label="LinkedIn"><i class="ti ti-brand-linkedin"></i></a>
+          <a href="https://tiktok.com/@YOUR_HANDLE" target="_blank" rel="noopener"
+             class="social-link" aria-label="TikTok"><i class="ti ti-brand-tiktok"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Quick Links</h4>
+        <ul class="footer__list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="properties.html">Properties</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="testimonies.html">Testimonies</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Services</h4>
+        <ul class="footer__list">
+          <li><a href="properties.html?type=land">Land for Sale</a></li>
+          <li><a href="properties.html?type=rent">Houses for Rent</a></li>
+          <li><a href="about.html#services">Property Consultation</a></li>
+          <li><a href="about.html#services">Site Visits</a></li>
+          <li><a href="about.html#services">Title Verification</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Contact</h4>
+        <ul class="footer__list footer__list--plain">
+          <li><i class="ti ti-map-pin"></i> Gulu City, Uganda</li>
+          <li><i class="ti ti-clock"></i> Mon–Sat: 8 am – 6 pm</li>
+          <li><i class="ti ti-phone"></i> +256 7XX XXX XXX</li>
+          <li><i class="ti ti-mail"></i> info@kerproperties.ug</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="container footer__bottom-inner">
+        <span>&copy; 2026 Ker Properties. All rights reserved.</span>
+        <span>Serving all districts of Uganda 🇺🇬</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="ti ti-arrow-up"></i>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabase.js"></script>
+  <script src="main.js"></script>
+  <script>
+    /* Note: redirect-if-already-logged-in is handled by initLogin() in main.js
+       using the real Supabase session — not sessionStorage. */
+
+    const pwToggle     = document.getElementById("pwToggle");
+    const pwField      = document.getElementById("lpassword");
+    const pwToggleIcon = document.getElementById("pwToggleIcon");
+    if (pwToggle && pwField) {
+      pwToggle.addEventListener("click", () => {
+        const hidden = pwField.type === "password";
+        pwField.type = hidden ? "text" : "password";
+        pwToggleIcon.className = hidden ? "ti ti-eye-off" : "ti ti-eye";
+      });
+    }
+
+    const forgotLink  = document.getElementById("forgotLink");
+    const resetPanel  = document.getElementById("resetPanel");
+    const cancelReset = document.getElementById("cancelReset");
+
+    forgotLink?.addEventListener("click", () => {
+      const isOpen = resetPanel.style.display === "block";
+      resetPanel.style.display = isOpen ? "none" : "block";
+      if (!isOpen) resetPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+    cancelReset?.addEventListener("click", () => {
+      resetPanel.style.display = "none";
+      const rc = document.getElementById("reset-contact");
+      if (rc) rc.value = "";
+      const rs = document.getElementById("resetStatus");
+      if (rs) { rs.textContent = ""; rs.className = "form-status"; }
+    });
+  </script>
+</body>
+</html>

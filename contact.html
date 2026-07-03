@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Contact Ker Properties — call, WhatsApp, email, or send a message. Serving all of Uganda." />
+  <title>Contact | Ker Properties</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.44.0/dist/tabler-icons.min.css" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ── Contact page extras ── */
+    .quick-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
+    .quick-action-card {
+      display: flex; align-items: center; gap: 0.85rem;
+      background: var(--white); border: 1px solid var(--silver-light);
+      border-radius: var(--radius-md); padding: 1rem 1.25rem;
+      flex: 1; min-width: 190px; box-shadow: var(--shadow-sm);
+      transition: all var(--transition); text-decoration: none; color: var(--text-primary);
+    }
+    .quick-action-card:hover { border-color: rgba(91,45,142,0.35); box-shadow: var(--shadow-md); transform: translateY(-3px); }
+    .quick-action-card__icon {
+      width: 44px; height: 44px; background: var(--purple-pale);
+      border: 1px solid rgba(91,45,142,0.15); border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--purple); font-size: 1.2rem; flex-shrink: 0;
+    }
+    .quick-action-card__label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+    .quick-action-card__val { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+
+    /* Hours table */
+    .hours-table { width: 100%; margin-top: 1rem; border-collapse: collapse; }
+    .hours-table td { padding: 0.45rem 0; font-size: 0.875rem; color: var(--text-mid); border-bottom: 1px solid var(--silver-light); }
+    .hours-table td:first-child { color: var(--text-primary); font-weight: 500; width: 55%; }
+    .hours-table tr:last-child td { border-bottom: none; }
+    .hours-open  { color: var(--green-tag) !important; font-weight: 500 !important; }
+    .hours-closed{ color: #9B1C1C !important; }
+
+    /* FAQ section */
+    .faq-section { padding: 5.5rem 1.75rem; background: var(--dark); position: relative; overflow: hidden; }
+    .faq-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 55% 55% at 50% 100%, rgba(91,45,142,0.20) 0%, transparent 60%); pointer-events: none; }
+    .faq-list { max-width: 720px; margin: 2.75rem auto 0; position: relative; }
+    .faq-item { background: rgba(255,255,255,0.04); border: 1px solid rgba(91,45,142,0.2); border-radius: var(--radius-md); margin-bottom: 0.75rem; overflow: hidden; transition: border-color var(--transition); }
+    .faq-item.open { border-color: rgba(155,89,208,0.45); }
+    .faq-question { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 1.15rem 1.35rem; font-size: 0.92rem; font-weight: 500; color: var(--white); background: none; border: none; cursor: pointer; text-align: left; gap: 1rem; transition: background var(--transition); font-family: var(--font-sans); }
+    .faq-question:hover { background: rgba(91,45,142,0.08); }
+    .faq-question i { font-size: 1.1rem; color: var(--purple-light); flex-shrink: 0; transition: transform var(--transition); }
+    .faq-item.open .faq-question i { transform: rotate(45deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.38s ease, padding var(--transition); padding: 0 1.35rem; font-size: 0.88rem; color: rgba(255,255,255,0.58); line-height: 1.78; }
+    .faq-item.open .faq-answer { max-height: 300px; padding: 0 1.35rem 1.35rem; }
+  </style>
+</head>
+<body>
+
+  
+  <header class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <a href="index.html" class="navbar__logo">
+        <img src="kpLogo-icon.png" alt="Ker Properties Logo" />
+        <div class="logo-wordmark">
+          <span class="logo-text">Ker</span>
+          <span class="logo-sub">Properties</span>
+        </div>
+      </a>
+
+      <nav class="navbar__links" id="navLinks">
+        <a href="index.html"       class="nav-link">Home</a>
+        <a href="properties.html"  class="nav-link">Properties</a>
+        <a href="about.html"       class="nav-link">About</a>
+        <a href="contact.html"     class="nav-link">Contact</a>
+        <a href="testimonies.html" class="nav-link">Testimonies</a>
+      </nav>
+
+      <div class="navbar__actions">
+        <a href="cart.html" class="btn btn--ghost cart-btn" title="Enquiry List">
+          <i class="ti ti-shopping-cart"></i>
+          <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+        </a>
+        <a href="admin.html" class="btn btn--primary">
+          <i class="ti ti-shield-lock"></i> Admin
+        </a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===================== PAGE HERO ===================== -->
+  <section class="page-hero">
+    <div class="container page-hero__inner">
+      <div class="page-hero__badge"><i class="ti ti-message-circle"></i> Talk to Us</div>
+      <h1 class="page-hero__title">Get in <span>Touch</span></h1>
+      <p class="page-hero__sub">
+        We serve all districts across Uganda. Reach us by call, WhatsApp,
+        email, or the form below — Monday to Saturday, 8 am – 6 pm.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT MAIN ===================== -->
+  <section class="contact">
+    <div class="container contact__inner">
+
+      <!-- ── Left: Info panel ── -->
+      <div class="contact__info fade-in">
+        <span class="section-tag">Contact Details</span>
+        <h2 class="section-title">We'd Love to<br />Hear From You</h2>
+        <div class="section-divider"></div>
+        <p class="contact__desc" style="margin-top:1rem">
+          Whether you have a question about a listing, need help arranging a
+          site visit, or simply want to know more about what we offer — our
+          team is always happy to help, wherever you are in Uganda.
+        </p>
+
+        <div class="contact__details">
+          <div class="contact__detail-item">
+            <div class="contact__icon"><i class="ti ti-phone"></i></div>
+            <div>
+              <div class="contact__detail-label">Phone / WhatsApp</div>
+              <div class="contact__detail-val">+256 7XX XXX XXX</div>
+            </div>
+          </div>
+          <div class="contact__detail-item">
+            <div class="contact__icon"><i class="ti ti-mail"></i></div>
+            <div>
+              <div class="contact__detail-label">Email Address</div>
+              <div class="contact__detail-val">info@kerproperties.ug</div>
+            </div>
+          </div>
+          <div class="contact__detail-item">
+            <div class="contact__icon"><i class="ti ti-map-pin"></i></div>
+            <div>
+              <div class="contact__detail-label">Head Office</div>
+              <div class="contact__detail-val">Gulu City, Northern Uganda</div>
+            </div>
+          </div>
+          <div class="contact__detail-item">
+            <div class="contact__icon"><i class="ti ti-world"></i></div>
+            <div>
+              <div class="contact__detail-label">Coverage</div>
+              <div class="contact__detail-val">All Districts — Nationwide</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick-action cards -->
+        <div class="quick-actions">
+          <a href="tel:+2567XXXXXXXX" class="quick-action-card">
+            <div class="quick-action-card__icon"><i class="ti ti-phone-call"></i></div>
+            <div>
+              <div class="quick-action-card__label">Call Now</div>
+              <div class="quick-action-card__val">+256 7XX XXX XXX</div>
+            </div>
+          </a>
+          <!-- Replace 2567XXXXXXXX with your real WhatsApp number -->
+          <a href="https://wa.me/2567XXXXXXXX?text=Hello%20Prestige%20Properties%2C%20I%20have%20an%20enquiry."
+             target="_blank" rel="noopener" class="quick-action-card">
+            <div class="quick-action-card__icon"
+                 style="background:rgba(37,211,102,0.10);border-color:rgba(37,211,102,0.2)">
+              <i class="ti ti-brand-whatsapp" style="color:#25D366"></i>
+            </div>
+            <div>
+              <div class="quick-action-card__label">WhatsApp</div>
+              <div class="quick-action-card__val">Chat with Us</div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Office hours -->
+        <div style="margin-top:2rem;background:var(--white);border:1px solid var(--silver-light);
+                    border-radius:var(--radius-md);padding:1.35rem 1.5rem;box-shadow:var(--shadow-sm)">
+          <div style="font-size:0.78rem;font-weight:600;text-transform:uppercase;
+                      letter-spacing:0.1em;color:var(--text-muted);margin-bottom:0.75rem">
+            Office Hours
+          </div>
+          <table class="hours-table">
+            <tr><td>Monday – Friday</td><td class="hours-open">8:00 am – 6:00 pm</td></tr>
+            <tr><td>Saturday</td><td class="hours-open">9:00 am – 4:00 pm</td></tr>
+            <tr><td>Sunday</td><td class="hours-closed">Closed</td></tr>
+            <tr><td>Public Holidays</td><td class="hours-closed">Closed</td></tr>
+          </table>
+        </div>
+
+        <!-- Google Maps iframe (fix #12) -->
+        <!--
+          HOW TO UPDATE THIS MAP:
+          1. Go to https://maps.google.com
+          2. Search for your exact office location (e.g. "Gulu City, Uganda")
+          3. Click Share → Embed a map → Copy the <iframe> code
+          4. Replace the entire <div class="contact__map"> block below
+             with your copied <iframe> tag (add class="contact__map" to the iframe)
+        -->
+        <div class="contact__map" style="margin-top:1.75rem">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63708.44392655768!2d32.25899!3d2.7747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x177885d6e7f3f8f5%3A0x3e6a5b8a6e9b2a3c!2sGulu%2C%20Uganda!5e0!3m2!1sen!2sug!4v1680000000000"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Ker Properties office location">
+          </iframe>
+        </div>
+      </div>
+
+      <!-- ── Right: Contact form (wired to admin inbox) ── -->
+      <form
+        class="contact__form fade-in"
+        id="contactForm"
+        name="contact"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+      >
+        <input type="hidden" name="form-name" value="contact" />
+        <p style="display:none"><label>Skip: <input name="bot-field" /></label></p>
+
+        <h3 style="font-family:var(--font-serif);font-size:1.25rem;font-weight:700;
+                   color:var(--text-primary);margin-bottom:1.5rem;padding-bottom:1rem;
+                   border-bottom:1px solid var(--silver-light)">
+          Send Us a Message
+        </h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">Full Name <span class="req">*</span></label>
+            <input type="text" id="fname" name="name" placeholder="Your full name" required />
+          </div>
+          <div class="form-group">
+            <label for="fphone">Phone / WhatsApp <span class="req">*</span></label>
+            <input type="tel" id="fphone" name="phone" placeholder="+256 7XX XXX XXX" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="femail">Email Address</label>
+          <input type="email" id="femail" name="email" placeholder="your@email.com" />
+        </div>
+
+        <div class="form-group">
+          <label for="fsubject">Subject</label>
+          <input type="text" id="fsubject" name="subject"
+            placeholder="e.g. Enquiry about land in Mbarara" />
+        </div>
+
+        <div class="form-group">
+          <label for="finterest">I am interested in</label>
+          <select id="finterest" name="interest">
+            <option value="">Select an option</option>
+            <optgroup label="Houses">
+              <option value="house-rent">Houses for Rent</option>
+              <option value="house-sale">Houses for Sale</option>
+            </optgroup>
+            <optgroup label="Land">
+              <option value="land-rent">Land for Rent</option>
+              <option value="land-sale">Land for Sale</option>
+            </optgroup>
+            <option value="visit">Arranging a Site Visit</option>
+            <option value="other">General Enquiry</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="fdistrict">District / Location of Interest</label>
+          <!-- Populated by main.js -->
+          <select id="fdistrict" name="district" class="district-select">
+            <option value="">Select a district</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="fbudget">Budget Range (UGX)</label>
+          <select id="fbudget" name="budget">
+            <option value="">Select a range</option>
+            <option value="under50m">Under 50 Million</option>
+            <option value="50-100m">50 – 100 Million</option>
+            <option value="100-200m">100 – 200 Million</option>
+            <option value="200-500m">200 – 500 Million</option>
+            <option value="over500m">Over 500 Million</option>
+            <option value="rental">Rental (Monthly)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="fmessage">Message <span class="req">*</span></label>
+          <textarea id="fmessage" name="message" rows="5"
+            placeholder="Tell us what you are looking for — preferred location, size, budget, timeline, and anything else that helps us find the right property for you…"
+            required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--full" id="contactSubmitBtn">
+          <i class="ti ti-send"></i> Send Message
+        </button>
+        <div class="form-status" id="formStatus"></div>
+
+        <p style="font-size:0.76rem;color:var(--text-muted);text-align:center;
+                  margin-top:1rem;line-height:1.6">
+          We typically respond within a few hours during working hours.
+          For urgent matters, please call or WhatsApp us directly.
+        </p>
+      </form>
+
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section class="faq-section">
+    <div class="container">
+      <div class="section-header section-header--center">
+        <span class="section-tag section-tag--light">FAQs</span>
+        <h2 class="section-title section-title--light">Common Questions</h2>
+        <div class="section-divider"></div>
+        <p class="section-sub section-sub--light" style="margin-top:.85rem">
+          Quick answers to questions we hear most often.
+        </p>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">How do I know a land title is genuine?<i class="ti ti-plus"></i></button>
+          <div class="faq-answer">Every listing on our platform has been verified at the Lands Registry office before going live. We confirm the owner's name, plot number, and any encumbrances. You can also request to see the original title document before signing anything.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Can I arrange a site visit before committing?<i class="ti ti-plus"></i></button>
+          <div class="faq-answer">Absolutely. We encourage all buyers and tenants to visit the property in person. Simply contact us via the form or WhatsApp and we will schedule a visit at a time that suits you — at no extra charge.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">What documents do I need to buy land?<i class="ti ti-plus"></i></button>
+          <div class="faq-answer">You will need a valid national ID or passport. We handle all the transfer forms and guide you through the Lands Registry process. For mailo or freehold titles, the transfer is registered at the relevant Lands Office on your behalf.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">How much is your agency commission?<i class="ti ti-plus"></i></button>
+          <div class="faq-answer">Our commission is transparent and agreed upfront before any transaction. For land sales it is typically a small percentage of the sale price paid by the seller. For rentals, one month's rent is the standard agency fee, paid once on lease signing.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Do you operate outside Gulu?<i class="ti ti-plus"></i></button>
+          <div class="faq-answer">Yes — we operate across all districts of Uganda. From Kampala, Wakiso, and Entebbe in the Central Region to Mbarara, Kabale, and Kasese in the West; Mbale, Jinja, and Tororo in the East; and Gulu, Lira, Arua, and more in the North. Contact us for any district.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">How long does a property transfer take?<i class="ti ti-plus"></i></button>
+          <div class="faq-answer">For a straightforward freehold or mailo transfer, the process typically takes 3–6 weeks from agreement to registration, depending on the Lands Registry workload. We manage the entire process on your behalf and keep you updated at every stage.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA BANNER ===================== -->
+  <div class="mid-banner">
+    <div class="container mid-banner__inner">
+      <div class="mid-banner__text">
+        <h3>Ready to browse properties?</h3>
+        <p>See all available land and houses across Uganda on our listings page.</p>
+      </div>
+      <a href="properties.html" class="btn btn--white">
+        <i class="ti ti-building-estate"></i> View All Properties
+      </a>
+    </div>
+  </div>
+
+  
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div class="footer__brand">
+        <a href="index.html" class="footer__logo">
+          <img src="kpLogo-icon-white.png" alt="Ker Properties" />
+          <div class="logo-wordmark">
+            <span class="logo-text">Ker</span>
+            <span class="logo-sub">Properties</span>
+          </div>
+        </a>
+        <p class="footer__desc">
+          Trusted real estate services across all districts of Uganda.
+          Your property journey starts here.
+        </p>
+        <div class="footer__socials">
+          <a href="https://facebook.com/YOUR_PAGE" target="_blank" rel="noopener"
+             class="social-link" aria-label="Facebook"><i class="ti ti-brand-facebook"></i></a>
+          <a href="https://wa.me/2567XXXXXXXX" target="_blank" rel="noopener"
+             class="social-link" aria-label="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>
+          <a href="https://instagram.com/YOUR_HANDLE" target="_blank" rel="noopener"
+             class="social-link" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+          <a href="https://linkedin.com/company/YOUR_PAGE" target="_blank" rel="noopener"
+             class="social-link" aria-label="LinkedIn"><i class="ti ti-brand-linkedin"></i></a>
+          <a href="https://tiktok.com/@YOUR_HANDLE" target="_blank" rel="noopener"
+             class="social-link" aria-label="TikTok"><i class="ti ti-brand-tiktok"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Quick Links</h4>
+        <ul class="footer__list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="properties.html">Properties</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="testimonies.html">Testimonies</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Services</h4>
+        <ul class="footer__list">
+          <li><a href="properties.html?type=land">Land for Sale</a></li>
+          <li><a href="properties.html?type=rent">Houses for Rent</a></li>
+          <li><a href="about.html#services">Property Consultation</a></li>
+          <li><a href="about.html#services">Site Visits</a></li>
+          <li><a href="about.html#services">Title Verification</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Contact</h4>
+        <ul class="footer__list footer__list--plain">
+          <li><i class="ti ti-map-pin"></i> Gulu City, Uganda</li>
+          <li><i class="ti ti-clock"></i> Mon–Sat: 8 am – 6 pm</li>
+          <li><i class="ti ti-phone"></i> +256 7XX XXX XXX</li>
+          <li><i class="ti ti-mail"></i> info@kerproperties.ug</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="container footer__bottom-inner">
+        <span>&copy; 2026 Ker Properties. All rights reserved.</span>
+        <span>Serving all districts of Uganda 🇺🇬</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="ti ti-arrow-up"></i>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabase.js"></script>
+  <script src="main.js"></script>
+  <script>
+    /* ── FAQ accordion ── */
+    document.querySelectorAll(".faq-question").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const item   = btn.closest(".faq-item");
+        const isOpen = item.classList.contains("open");
+        document.querySelectorAll(".faq-item").forEach(i => i.classList.remove("open"));
+        if (!isOpen) item.classList.add("open");
+      });
+    });
+  </script>
+</body>
+</html>

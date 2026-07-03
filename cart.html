@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Your property enquiry list — Ker Properties." />
+  <title>Enquiry List | Ker Properties</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.44.0/dist/tabler-icons.min.css" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ── Cart page extras ── */
+    .cart-header-row {
+      display: flex; align-items: center;
+      margin-bottom: 1.35rem; gap: .75rem; flex-wrap: wrap;
+    }
+    .cart-section-title {
+      font-family: var(--font-serif); font-size: 1.15rem;
+      font-weight: 700; color: var(--text-primary);
+      display: flex; align-items: center; gap: .6rem;
+    }
+    .cart-section-title i { color: var(--purple); font-size: 1.1rem; }
+    .cart-count-pill {
+      background: var(--navy); color: var(--white);
+      font-size: .72rem; font-weight: 700;
+      padding: 2px 9px; border-radius: 100px;
+      font-family: var(--font-sans);
+    }
+    .cart-clear {
+      background: none; border: 1.5px solid var(--silver-light);
+      border-radius: var(--radius-sm); padding: .35rem .85rem;
+      font-size: .8rem; color: var(--text-muted); cursor: pointer;
+      transition: all var(--transition); display: flex;
+      align-items: center; gap: 5px; font-family: var(--font-sans);
+      margin-left: auto;
+    }
+    .cart-clear:hover { background: var(--red-bg); border-color: var(--red-tag); color: var(--red-tag); }
+
+    .cart-help {
+      background: var(--purple-pale); border: 1px solid rgba(91,45,142,.15);
+      border-radius: var(--radius-md); padding: 1rem 1.25rem;
+      margin-top: 1.35rem; font-size: .83rem; color: var(--text-mid);
+      line-height: 1.65; display: flex; gap: .75rem; align-items: flex-start;
+    }
+    .cart-help i { color: var(--purple); font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* Enquiry form inside summary */
+    .enquiry-form {
+      margin-top: 1.5rem; padding-top: 1.5rem;
+      border-top: 1px solid var(--silver-light);
+    }
+    .enquiry-form h4 {
+      font-family: var(--font-serif); font-size: 1rem;
+      font-weight: 700; color: var(--text-primary); margin-bottom: 1rem;
+    }
+
+    /* How it works */
+    .how-it-works {
+      padding: 4.5rem 1.75rem; background: var(--dark);
+      position: relative; overflow: hidden;
+    }
+    .how-it-works::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 50% 80% at 50% 100%,
+        rgba(91,45,142,.18) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .how-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.5rem; margin-top: 3rem; position: relative;
+    }
+    .how-step { text-align: center; padding: 1.5rem 1rem; }
+    .how-step__num {
+      width: 48px; height: 48px;
+      background: rgba(91,45,142,.25);
+      border: 1px solid rgba(155,89,208,.35); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-serif); font-size: 1.25rem;
+      font-weight: 700; color: var(--purple-light); margin: 0 auto 1rem;
+    }
+    .how-step__title { font-size: .9rem; font-weight: 600; color: var(--white); margin-bottom: .4rem; }
+    .how-step__text { font-size: .82rem; color: rgba(255,255,255,.45); line-height: 1.65; }
+  </style>
+</head>
+<body>
+
+  
+  <header class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <a href="index.html" class="navbar__logo">
+        <img src="kpLogo-icon.png" alt="Ker Properties Logo" />
+        <div class="logo-wordmark">
+          <span class="logo-text">Ker</span>
+          <span class="logo-sub">Properties</span>
+        </div>
+      </a>
+
+      <nav class="navbar__links" id="navLinks">
+        <a href="index.html"       class="nav-link">Home</a>
+        <a href="properties.html"  class="nav-link">Properties</a>
+        <a href="about.html"       class="nav-link">About</a>
+        <a href="contact.html"     class="nav-link">Contact</a>
+        <a href="testimonies.html" class="nav-link">Testimonies</a>
+      </nav>
+
+      <div class="navbar__actions">
+        <a href="cart.html" class="btn btn--ghost cart-btn" title="Enquiry List">
+          <i class="ti ti-shopping-cart"></i>
+          <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+        </a>
+        <a href="admin.html" class="btn btn--primary">
+          <i class="ti ti-shield-lock"></i> Admin
+        </a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===================== PAGE HERO ===================== -->
+  <section class="page-hero">
+    <div class="container page-hero__inner">
+      <div class="page-hero__badge">
+        <i class="ti ti-shopping-cart"></i> Your Selections
+      </div>
+      <h1 class="page-hero__title">Enquiry <span>List</span></h1>
+      <p class="page-hero__sub">
+        Properties you have saved for enquiry. Click <strong>Details</strong>
+        to view full property info and send an enquiry directly to our team.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== CART CONTENT ===================== -->
+  <section class="cart-page">
+    <div class="container">
+      <div class="cart-page__inner">
+
+        <!-- ── LEFT: Saved items ── -->
+        <div>
+
+          <!-- Empty state -->
+          <div class="cart-empty" id="cartEmpty" style="display:none">
+            <i class="ti ti-shopping-cart-off"></i>
+            <p>Your enquiry list is empty.<br />
+               Browse properties and tap the
+               <strong>heart ♥</strong> icon to save them here.
+            </p>
+            <a href="properties.html" class="btn btn--primary">
+              <i class="ti ti-building-estate"></i> Browse Properties
+            </a>
+          </div>
+
+          
+          <div class="cart-header-row" id="cartHeaderRow" style="display:none">
+            <div class="cart-section-title">
+              <i class="ti ti-clipboard-list"></i>
+              Saved Properties
+              <span class="cart-count-pill" id="cartItemCount">0</span>
+            </div>
+            <button class="cart-clear" onclick="clearAllCart()">
+              <i class="ti ti-trash"></i> Clear All
+            </button>
+          </div>
+
+          
+          <div id="cartItems"></div>
+
+          
+          <div class="cart-help" id="cartHelpNote" style="display:none">
+            <i class="ti ti-info-circle"></i>
+            <span>
+              Click <strong>Details</strong> on any property to view full information
+              and send an enquiry directly to our team. No payment is required at this stage.
+            </span>
+          </div>
+
+        </div>
+
+        
+        <div id="cartSummary" style="display:none">
+          <div class="cart-summary">
+
+            <div class="cart-summary__title">
+              <i class="ti ti-clipboard-list" style="color:var(--purple);margin-right:6px"></i>
+              Enquiry Summary
+            </div>
+
+            <div class="cart-summary__row">
+              <span>Properties saved</span>
+              <span id="cartItemCountSide"
+                style="font-weight:600;color:var(--purple)">0</span>
+            </div>
+            <div class="cart-summary__row">
+              <span>Status</span>
+              <span style="color:var(--green-tag);font-weight:500">Ready to submit</span>
+            </div>
+            <div class="cart-summary__row cart-summary__row--total">
+              <span>Total items</span>
+              <span id="cartItemCountTotal">0</span>
+            </div>
+
+            
+            <div class="enquiry-form">
+              <h4>Send a Bulk Enquiry</h4>
+              <p style="font-size:.8rem;color:var(--text-muted);margin-bottom:1rem;line-height:1.55">
+                Submit your details and we will contact you about all saved properties at once.
+                Or click <strong>Details</strong> on any item for a property-specific enquiry.
+              </p>
+
+              <form
+                id="enquiryForm"
+                name="enquiry"
+                method="POST"
+                data-netlify="true"
+                netlify-honeypot="bot-field"
+              >
+                <input type="hidden" name="form-name"            value="enquiry" />
+                <input type="hidden" name="selected_properties"  id="selectedPropertiesInput" />
+                <p style="display:none"><label>Skip: <input name="bot-field" /></label></p>
+
+                <div class="form-group">
+                  <label for="eq-name">Full Name <span class="req">*</span></label>
+                  <input type="text" id="eq-name" name="name"
+                    placeholder="Your full name" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="eq-phone">Phone / WhatsApp <span class="req">*</span></label>
+                  <input type="tel" id="eq-phone" name="phone"
+                    placeholder="+256 7XX XXX XXX" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="eq-email">Email Address</label>
+                  <input type="email" id="eq-email" name="email"
+                    placeholder="your@email.com" />
+                </div>
+
+                <div class="form-group">
+                  <label for="eq-notes">Additional Notes</label>
+                  <textarea id="eq-notes" name="notes" rows="3"
+                    placeholder="Any specific questions or requirements about these properties…"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn--primary btn--full"
+                  id="enquirySubmitBtn">
+                  <i class="ti ti-send"></i> Send Enquiry
+                </button>
+                <div class="form-status" id="enquiryStatus"></div>
+              </form>
+            </div>
+
+          </div>
+        </div>
+        <!-- end right col -->
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HOW IT WORKS ===================== -->
+  <section class="how-it-works">
+    <div class="container">
+      <div class="section-header section-header--center">
+        <span class="section-tag section-tag--light">Simple Process</span>
+        <h2 class="section-title section-title--light">How It Works</h2>
+        <div class="section-divider"></div>
+        <p class="section-sub section-sub--light" style="margin-top:.85rem">
+          Getting a response about any property takes just a few steps.
+        </p>
+      </div>
+
+      <div class="how-steps">
+        <div class="how-step fade-in">
+          <div class="how-step__num">1</div>
+          <div class="how-step__title">Browse &amp; Save</div>
+          <p class="how-step__text">
+            Browse listings and tap the <strong style="color:rgba(255,255,255,.75)">heart ♥</strong>
+            on any property that interests you to save it here.
+          </p>
+        </div>
+        <div class="how-step fade-in">
+          <div class="how-step__num">2</div>
+          <div class="how-step__title">View Details</div>
+          <p class="how-step__text">
+            Click <strong style="color:rgba(255,255,255,.75)">Details</strong> on any saved
+            property to see full info — photos, features, price — and send a direct enquiry.
+          </p>
+        </div>
+        <div class="how-step fade-in">
+          <div class="how-step__num">3</div>
+          <div class="how-step__title">We Call You</div>
+          <p class="how-step__text">
+            Our team contacts you within a few hours to discuss each property,
+            answer questions, and arrange a site visit.
+          </p>
+        </div>
+        <div class="how-step fade-in">
+          <div class="how-step__num">4</div>
+          <div class="how-step__title">Site Visit &amp; Deal</div>
+          <p class="how-step__text">
+            We accompany you to view the property, handle all paperwork,
+            and guide you to a smooth agreement.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA BANNER ===================== -->
+  <div class="mid-banner">
+    <div class="container mid-banner__inner">
+      <div class="mid-banner__text">
+        <h3>Don't see what you want?</h3>
+        <p>Contact us directly and we'll find the right property — anywhere in Uganda.</p>
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <a href="properties.html" class="btn btn--white">
+          <i class="ti ti-building-estate"></i> Browse More
+        </a>
+        <a href="contact.html" class="btn btn--outline-white">
+          <i class="ti ti-phone"></i> Contact Us
+        </a>
+      </div>
+    </div>
+  </div>
+
+  
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div class="footer__brand">
+        <a href="index.html" class="footer__logo">
+          <img src="kpLogo-icon-white.png" alt="Ker Properties" />
+          <div class="logo-wordmark">
+            <span class="logo-text">Ker</span>
+            <span class="logo-sub">Properties</span>
+          </div>
+        </a>
+        <p class="footer__desc">
+          Trusted real estate services across all districts of Uganda.
+          Your property journey starts here.
+        </p>
+        <div class="footer__socials">
+          <a href="https://facebook.com/YOUR_PAGE" target="_blank" rel="noopener"
+             class="social-link" aria-label="Facebook"><i class="ti ti-brand-facebook"></i></a>
+          <a href="https://wa.me/2567XXXXXXXX" target="_blank" rel="noopener"
+             class="social-link" aria-label="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>
+          <a href="https://instagram.com/YOUR_HANDLE" target="_blank" rel="noopener"
+             class="social-link" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+          <a href="https://linkedin.com/company/YOUR_PAGE" target="_blank" rel="noopener"
+             class="social-link" aria-label="LinkedIn"><i class="ti ti-brand-linkedin"></i></a>
+          <a href="https://tiktok.com/@YOUR_HANDLE" target="_blank" rel="noopener"
+             class="social-link" aria-label="TikTok"><i class="ti ti-brand-tiktok"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Quick Links</h4>
+        <ul class="footer__list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="properties.html">Properties</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="testimonies.html">Testimonies</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Services</h4>
+        <ul class="footer__list">
+          <li><a href="properties.html?type=land">Land for Sale</a></li>
+          <li><a href="properties.html?type=rent">Houses for Rent</a></li>
+          <li><a href="about.html#services">Property Consultation</a></li>
+          <li><a href="about.html#services">Site Visits</a></li>
+          <li><a href="about.html#services">Title Verification</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Contact</h4>
+        <ul class="footer__list footer__list--plain">
+          <li><i class="ti ti-map-pin"></i> Gulu City, Uganda</li>
+          <li><i class="ti ti-clock"></i> Mon–Sat: 8 am – 6 pm</li>
+          <li><i class="ti ti-phone"></i> +256 7XX XXX XXX</li>
+          <li><i class="ti ti-mail"></i> info@kerproperties.ug</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="container footer__bottom-inner">
+        <span>&copy; 2026 Ker Properties. All rights reserved.</span>
+        <span>Serving all districts of Uganda 🇺🇬</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="ti ti-arrow-up"></i>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabase.js"></script>
+  <script src="main.js"></script>
+  <script>
+    /* ── Cart page extras (beyond main.js renderCartPage) ── */
+
+    function refreshCartUI() {
+      const cart       = getCart();
+      const headerRow  = document.getElementById("cartHeaderRow");
+      const helpNote   = document.getElementById("cartHelpNote");
+      const countSide  = document.getElementById("cartItemCountSide");
+      const countTotal = document.getElementById("cartItemCountTotal");
+      const propInput  = document.getElementById("selectedPropertiesInput");
+
+      if (headerRow)  headerRow.style.display  = cart.length > 0 ? "flex"  : "none";
+      if (helpNote)   helpNote.style.display   = cart.length > 0 ? "flex"  : "none";
+      if (countSide)  countSide.textContent    = cart.length;
+      if (countTotal) countTotal.textContent   = cart.length;
+      if (propInput)  propInput.value          =
+        cart.map(c => `${c.title} (${c.price})`).join(" | ");
+    }
+
+    function clearAllCart() {
+      if (!confirm("Remove all properties from your enquiry list?")) return;
+      try { localStorage.removeItem("kp_cart"); } catch(e) {}
+      updateCartBadge();
+      renderCartPage();
+      refreshCartUI();
+      showToast("Enquiry list cleared.");
+    }
+    window.clearAllCart = clearAllCart;
+
+    /* Bulk enquiry form — Netlify + local inbox (fix #4) */
+    const enquiryForm   = document.getElementById("enquiryForm");
+    const enquiryStatus = document.getElementById("enquiryStatus");
+    const enquiryBtn    = document.getElementById("enquirySubmitBtn");
+
+    if (enquiryForm) {
+      enquiryForm.addEventListener("submit", async e => {
+        e.preventDefault();
+        const name  = document.getElementById("eq-name")?.value.trim();
+        const phone = document.getElementById("eq-phone")?.value.trim();
+        const email = document.getElementById("eq-email")?.value.trim() || "";
+        const notes = document.getElementById("eq-notes")?.value.trim() || "";
+
+        if (!name || !phone) {
+          if (enquiryStatus) {
+            enquiryStatus.textContent = "Please enter your name and phone number.";
+            enquiryStatus.className   = "form-status error";
+          }
+          return;
+        }
+
+        /* Refresh property list in hidden field */
+        const cart     = getCart();
+        const propList = cart.map(c => `${c.title} (${c.price})`).join(" | ");
+        const propInput = document.getElementById("selectedPropertiesInput");
+        if (propInput) propInput.value = propList;
+
+        if (enquiryBtn) {
+          enquiryBtn.disabled  = true;
+          enquiryBtn.innerHTML = '<i class="ti ti-loader-2 ti-spin"></i> Sending…';
+        }
+        if (enquiryStatus) {
+          enquiryStatus.textContent = "";
+          enquiryStatus.className   = "form-status";
+        }
+
+        try {
+          const body = new URLSearchParams(new FormData(enquiryForm)).toString();
+          await fetch("/", {
+            method:  "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body
+          });
+
+          /* Save to Supabase inbox so admin sees it on any device */
+          await saveMessage({
+            from:    name,
+            phone,
+            email,
+            subject: `Bulk Enquiry — ${cart.length} propert${cart.length !== 1 ? "ies" : "y"}`,
+            body:    `Properties:\n${cart.map(c => `• ${c.title} (${c.price})`).join("\n")}${notes ? "\n\nNotes: " + notes : ""}`,
+            type:    "enquiry"
+          });
+
+          /* Clear cart after successful submission */
+          try { localStorage.removeItem("kp_cart"); } catch(e) {}
+          updateCartBadge();
+          renderCartPage();
+          refreshCartUI();
+          enquiryForm.reset();
+
+          if (enquiryStatus) {
+            enquiryStatus.textContent = "✓ Enquiry sent! Our team will call you shortly.";
+            enquiryStatus.className   = "form-status success";
+          }
+          showToast("Enquiry submitted successfully!");
+
+        } catch {
+          if (enquiryStatus) {
+            enquiryStatus.textContent = "Something went wrong. Please call or WhatsApp us directly.";
+            enquiryStatus.className   = "form-status error";
+          }
+        } finally {
+          if (enquiryBtn) {
+            enquiryBtn.disabled  = false;
+            enquiryBtn.innerHTML = '<i class="ti ti-send"></i> Send Enquiry';
+          }
+        }
+      });
+    }
+
+    /* Run on load */
+    document.addEventListener("DOMContentLoaded", refreshCartUI);
+  </script>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       Hidden Netlify Forms stub — DO NOT REMOVE.
+       The real property-enquiry form is built dynamically in JavaScript
+       (see openDetailModal() in main.js) when a visitor clicks "Details"
+       on a listing. Netlify Forms only detects forms present in the
+       static HTML at deploy time — it cannot see forms created by
+       JavaScript at runtime. This invisible stub has the exact same
+       name and field set, purely so Netlify's build-time crawler
+       registers "property-enquiry" as a known form and sets up email
+       notifications for it. It is never shown or submitted directly.
+       ════════════════════════════════════════════════════════════════ -->
+  <form name="property-enquiry" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="property-enquiry" />
+    <input type="text" name="property_title" />
+    <input type="text" name="property_location" />
+    <input type="text" name="property_price" />
+    <input type="text" name="property_type" />
+    <input type="text" name="name" />
+    <input type="tel" name="phone" />
+    <input type="email" name="email" />
+    <textarea name="message"></textarea>
+    <input name="bot-field" />
+  </form>
+</body>
+</html>

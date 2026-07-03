@@ -1,0 +1,9 @@
+{
+  "name": "ker-properties",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ker Properties — Uganda real estate website",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.0"
+  }
+}

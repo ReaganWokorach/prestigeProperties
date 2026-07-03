@@ -1,0 +1,66 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Ker Properties — Netlify deployment configuration
+# ═══════════════════════════════════════════════════════════════════════════
+
+[build]
+  publish = "."
+
+[functions]
+  directory = "netlify/functions"
+
+# ── Security headers applied to every page ──
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    # Content-Security-Policy: allow Supabase, Google Fonts, Tabler Icons CDN, jsdelivr.
+    # Update YOUR_PROJECT_ID to match your real Supabase project URL.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: blob: https://*.supabase.co https://maps.gstatic.com https://maps.googleapis.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-src https://www.google.com https://maps.google.com; frame-ancestors 'none';"
+
+# ── Long-lived caching for static assets (images, CSS, JS) ──
+# Browsers will reuse the cached copy instead of re-downloading on every
+# visit. max-age=604800 = 7 days for images; 86400 = 1 day for CSS/JS
+# (short enough to pick up intentional updates quickly).
+[[headers]]
+  for = "/*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, must-revalidate"
+
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, must-revalidate"
+
+[[headers]]
+  for = "/style.css"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+[[headers]]
+  for = "/main.js"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+[[headers]]
+  for = "/supabase.js"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+# ── Extra hardening for the admin and login pages ──
+[[headers]]
+  for = "/admin.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/login.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store"
+
+# ── Netlify Forms still works for contact / enquiry / review notifications ──
+# (No redirect rules needed — this is a static multi-page site, not a SPA.)

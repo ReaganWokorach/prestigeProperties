@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn about Ker Properties — our story, values, team, and services across Uganda." />
+  <title>About Us | Ker Properties</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.44.0/dist/tabler-icons.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  
+  <header class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <a href="index.html" class="navbar__logo">
+        <img src="kpLogo-icon.png" alt="Ker Properties Logo" />
+        <div class="logo-wordmark">
+          <span class="logo-text">Ker</span>
+          <span class="logo-sub">Properties</span>
+        </div>
+      </a>
+
+      <nav class="navbar__links" id="navLinks">
+        <a href="index.html"       class="nav-link">Home</a>
+        <a href="properties.html"  class="nav-link">Properties</a>
+        <a href="about.html"       class="nav-link">About</a>
+        <a href="contact.html"     class="nav-link">Contact</a>
+        <a href="testimonies.html" class="nav-link">Testimonies</a>
+      </nav>
+
+      <div class="navbar__actions">
+        <a href="cart.html" class="btn btn--ghost cart-btn" title="Enquiry List">
+          <i class="ti ti-shopping-cart"></i>
+          <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+        </a>
+        <a href="admin.html" class="btn btn--primary">
+          <i class="ti ti-shield-lock"></i> Admin
+        </a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===================== PAGE HERO ===================== -->
+  <section class="page-hero">
+    <div class="container page-hero__inner">
+      <div class="page-hero__badge"><i class="ti ti-users"></i> Our Story</div>
+      <h1 class="page-hero__title">About <span>Ker</span><br />Properties</h1>
+      <p class="page-hero__sub">
+        A trusted name in Uganda's property market — helping families buy land
+        and find quality homes across the entire country since 2015.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== OUR STORY ===================== -->
+  <section class="about-story">
+    <div class="container about-story__inner">
+
+      <div class="about-story__visual fade-in" style="padding:0;overflow:hidden;background:linear-gradient(135deg,var(--purple-pale) 0%,var(--purple-soft) 100%)">
+        <!-- Logo displayed prominently — swap src for founder photo if available -->
+        <img
+          src="kpLogo.png"
+          alt="Ker Properties Logo"
+          style="width:80%;max-width:340px;height:auto;object-fit:contain;
+                 filter:drop-shadow(0 4px 20px rgba(91,45,142,0.18));
+                 padding:2rem;position:relative;z-index:1"
+        />
+      </div>
+
+      <div class="about-story__text fade-in">
+        <span class="section-tag">Who We Are</span>
+        <h2 class="section-title">Built on Trust,<br />Serving All of Uganda</h2>
+        <div class="section-divider"></div>
+
+        <p style="margin-top:1rem">
+          Ker Properties was founded with one mission: to make property
+          ownership and quality housing accessible to every Ugandan family —
+          regardless of where they live. What started as a small brokerage
+          has grown into one of Uganda's most recognised real estate names,
+          with active listings in over 50 districts.
+        </p>
+        <p>
+          We specialise in verified land sales — freehold, mailo, leasehold,
+          and customary titles — and connect tenants with well-maintained
+          rental homes from Kampala to Gulu, Mbarara to Mbale, and everywhere
+          in between. Every listing on our platform is personally verified by
+          our team before it goes live.
+        </p>
+        <p>
+          Our clients trust us because we are transparent about prices, honest
+          about title status, and always available to answer questions — in
+          person, by phone, or on WhatsApp.
+        </p>
+
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.85rem">
+          <a href="properties.html" class="btn btn--primary">
+            <i class="ti ti-building-estate"></i> Browse Properties
+          </a>
+          <a href="contact.html" class="btn btn--outline">
+            <i class="ti ti-phone"></i> Get in Touch
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CORE VALUES ===================== -->
+  <section class="about-values">
+    <div class="container">
+      <div class="section-header section-header--center">
+        <span class="section-tag section-tag--light">Our Values</span>
+        <h2 class="section-title section-title--light">What We Stand For</h2>
+        <div class="section-divider"></div>
+        <p class="section-sub section-sub--light" style="margin-top:.85rem">
+          Everything we do is guided by these core principles.
+        </p>
+      </div>
+
+      <div class="values-grid">
+        <div class="value-card fade-in">
+          <div class="value-card__icon"><i class="ti ti-shield-check"></i></div>
+          <div class="value-card__title">Verified Listings</div>
+          <p class="value-card__text">Every property is physically inspected and title documents confirmed before listing. No guesswork, no surprises.</p>
+        </div>
+        <div class="value-card fade-in">
+          <div class="value-card__icon"><i class="ti ti-eye"></i></div>
+          <div class="value-card__title">Full Transparency</div>
+          <p class="value-card__text">We tell you exactly what you are buying or renting — price, title type, boundaries, and any encumbrances — upfront.</p>
+        </div>
+        <div class="value-card fade-in">
+          <div class="value-card__icon"><i class="ti ti-users"></i></div>
+          <div class="value-card__title">Client First</div>
+          <p class="value-card__text">Our team works around your schedule. Site visits, documentation help, and follow-ups are all part of the service.</p>
+        </div>
+        <div class="value-card fade-in">
+          <div class="value-card__icon"><i class="ti ti-clock"></i></div>
+          <div class="value-card__title">Fast Turnaround</div>
+          <p class="value-card__text">From first enquiry to signed agreement, we move quickly so you do not lose a great property to someone else.</p>
+        </div>
+        <div class="value-card fade-in">
+          <div class="value-card__icon"><i class="ti ti-map-pin"></i></div>
+          <div class="value-card__title">Nationwide Expertise</div>
+          <p class="value-card__text">We know Uganda's property landscape deeply — from Kampala's suburbs to Northern Uganda's growing towns and beyond.</p>
+        </div>
+        <div class="value-card fade-in">
+          <div class="value-card__icon"><i class="ti ti-heart-handshake"></i></div>
+          <div class="value-card__title">Fair Dealing</div>
+          <p class="value-card__text">We negotiate on your behalf and never inflate prices. Our commission is earned through service, not shortcuts.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TEAM ===================== -->
+  <section class="about-team">
+    <div class="container">
+      <div class="section-header section-header--center">
+        <span class="section-tag">The Team</span>
+        <h2 class="section-title">The Team Behind Ker Properties</h2>
+        <div class="section-divider"></div>
+        <p class="section-sub" style="margin-top:.85rem">
+          A dedicated team committed to your property goals across Uganda.
+        </p>
+      </div>
+
+      <div class="team-grid" id="teamGrid">
+        <!-- Populated dynamically by renderTeamGrid() in main.js.
+             Falls back to initials avatars (e.g. "RO") exactly like the
+             original static markup whenever a member has no photo set. -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SERVICES ===================== -->
+  <section class="about-services" id="services">
+    <div class="container">
+      <div class="section-header section-header--center">
+        <span class="section-tag section-tag--light">What We Offer</span>
+        <h2 class="section-title section-title--light">Our Services</h2>
+        <div class="section-divider"></div>
+        <p class="section-sub section-sub--light" style="margin-top:.85rem">
+          End-to-end property support — from search to signed agreement, anywhere in Uganda.
+        </p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card fade-in">
+          <div class="service-card__icon"><i class="ti ti-map"></i></div>
+          <div class="service-card__title">Land for Sale</div>
+          <p class="service-card__text">Browse verified plots across all Uganda districts. All titles confirmed. We guide you through the full transfer process.</p>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-card__icon"><i class="ti ti-home"></i></div>
+          <div class="service-card__title">Houses for Rent</div>
+          <p class="service-card__text">Self-contained rooms, apartments, and family homes across Uganda. Inspected, fairly priced, and available now.</p>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-card__icon"><i class="ti ti-walk"></i></div>
+          <div class="service-card__title">Site Visits</div>
+          <p class="service-card__text">We accompany you to any property before you commit. No surprises between the listing and reality — guaranteed.</p>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-card__icon"><i class="ti ti-file-certificate"></i></div>
+          <div class="service-card__title">Title Verification</div>
+          <p class="service-card__text">We work directly with Lands Registry offices to verify ownership, confirm boundaries, and flag any encumbrances.</p>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-card__icon"><i class="ti ti-notebook"></i></div>
+          <div class="service-card__title">Lease Agreements</div>
+          <p class="service-card__text">We prepare simple, fair lease agreements for all rental properties so both landlord and tenant are protected.</p>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-card__icon"><i class="ti ti-headset"></i></div>
+          <div class="service-card__title">After-Sale Support</div>
+          <p class="service-card__text">Got questions after signing? Our team remains available to help with transfer processes, utility connections, and more.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA BANNER ===================== -->
+  <div class="mid-banner">
+    <div class="container mid-banner__inner">
+      <div class="mid-banner__text">
+        <h3>Ready to find your property?</h3>
+        <p>Browse our full listings or talk directly to our team — anywhere in Uganda.</p>
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <a href="properties.html" class="btn btn--white">
+          <i class="ti ti-building-estate"></i> Browse Properties
+        </a>
+        <a href="contact.html" class="btn btn--outline-white">
+          <i class="ti ti-phone"></i> Contact Us
+        </a>
+      </div>
+    </div>
+  </div>
+
+  
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div class="footer__brand">
+        <a href="index.html" class="footer__logo">
+          <img src="kpLogo-icon-white.png" alt="Ker Properties" />
+          <div class="logo-wordmark">
+            <span class="logo-text">Ker</span>
+            <span class="logo-sub">Properties</span>
+          </div>
+        </a>
+        <p class="footer__desc">
+          Trusted real estate services across all districts of Uganda.
+          Your property journey starts here.
+        </p>
+        <div class="footer__socials">
+          <a href="https://facebook.com/YOUR_PAGE" target="_blank" rel="noopener"
+             class="social-link" aria-label="Facebook"><i class="ti ti-brand-facebook"></i></a>
+          <a href="https://wa.me/2567XXXXXXXX" target="_blank" rel="noopener"
+             class="social-link" aria-label="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>
+          <a href="https://instagram.com/YOUR_HANDLE" target="_blank" rel="noopener"
+             class="social-link" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+          <a href="https://linkedin.com/company/YOUR_PAGE" target="_blank" rel="noopener"
+             class="social-link" aria-label="LinkedIn"><i class="ti ti-brand-linkedin"></i></a>
+          <a href="https://tiktok.com/@YOUR_HANDLE" target="_blank" rel="noopener"
+             class="social-link" aria-label="TikTok"><i class="ti ti-brand-tiktok"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Quick Links</h4>
+        <ul class="footer__list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="properties.html">Properties</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="testimonies.html">Testimonies</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Services</h4>
+        <ul class="footer__list">
+          <li><a href="properties.html?type=land">Land for Sale</a></li>
+          <li><a href="properties.html?type=rent">Houses for Rent</a></li>
+          <li><a href="about.html#services">Property Consultation</a></li>
+          <li><a href="about.html#services">Site Visits</a></li>
+          <li><a href="about.html#services">Title Verification</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Contact</h4>
+        <ul class="footer__list footer__list--plain">
+          <li><i class="ti ti-map-pin"></i> Gulu City, Uganda</li>
+          <li><i class="ti ti-clock"></i> Mon–Sat: 8 am – 6 pm</li>
+          <li><i class="ti ti-phone"></i> +256 7XX XXX XXX</li>
+          <li><i class="ti ti-mail"></i> info@kerproperties.ug</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="container footer__bottom-inner">
+        <span>&copy; 2026 Ker Properties. All rights reserved.</span>
+        <span>Serving all districts of Uganda 🇺🇬</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="ti ti-arrow-up"></i>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabase.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Ker Properties — Buy land and rent houses across Uganda. Trusted, verified, and fast." />
+  <title>Home | Ker Properties</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <!-- Preload the first hero image so it paints immediately on load -->
+  <link rel="preload" as="image" href="hero1.jpg" fetchpriority="high" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.44.0/dist/tabler-icons.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  
+  <header class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <a href="index.html" class="navbar__logo">
+        <img src="kpLogo-icon.png" alt="Ker Properties Logo" />
+        <div class="logo-wordmark">
+          <span class="logo-text">Ker</span>
+          <span class="logo-sub">Properties</span>
+        </div>
+      </a>
+
+      <nav class="navbar__links" id="navLinks">
+        <a href="index.html"       class="nav-link">Home</a>
+        <a href="properties.html"  class="nav-link">Properties</a>
+        <a href="about.html"       class="nav-link">About</a>
+        <a href="contact.html"     class="nav-link">Contact</a>
+        <a href="testimonies.html" class="nav-link">Testimonies</a>
+      </nav>
+
+      <div class="navbar__actions">
+        <a href="cart.html" class="btn btn--ghost cart-btn" title="Enquiry List">
+          <i class="ti ti-shopping-cart"></i>
+          <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+        </a>
+        <a href="admin.html" class="btn btn--primary">
+          <i class="ti ti-shield-lock"></i> Admin
+        </a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===================== HERO — Photo Slideshow + Ken Burns ===================== -->
+  <section class="hero">
+
+    <!-- Background photo slides — each cycles with Ken Burns zoom -->
+    <div class="hero__slides">
+      <div class="hero__slide active"></div>  <!-- hero1.jpg via CSS -->
+      <div class="hero__slide"></div>          <!-- hero2.jpg via CSS -->
+      <div class="hero__slide"></div>          <!-- hero3.jpg via CSS -->
+    </div>
+
+    <!-- Gradient overlay -->
+    <div class="hero__overlay"></div>
+
+    <!-- Content -->
+    <div class="hero__inner">
+      <div class="hero__badge">
+        <i class="ti ti-crown"></i> Uganda's Trusted Property Partner
+      </div>
+
+      <h1 class="hero__title">
+        Find Your <span class="hero__title--accent">Perfect</span><br />
+        Land &amp; Home<br />Across Uganda
+      </h1>
+
+      <p class="hero__sub">
+        Buy prime land and rent quality homes in any district across Uganda.
+        Every listing is verified, transparent, and ready for you.
+      </p>
+
+      <!-- Search Bar -->
+      <form class="hero__search" id="searchForm" novalidate>
+        <div class="search__group">
+          <i class="ti ti-search search__icon"></i>
+          <input
+            type="text"
+            id="searchInput"
+            class="search__input"
+            placeholder="Search by location, type or price…"
+            autocomplete="off"
+          />
+        </div>
+        <select id="searchType" class="search__select">
+          <option value="all">All Types</option>
+          <optgroup label="Houses">
+            <option value="house-rent">Houses for Rent</option>
+            <option value="house-sale">Houses for Sale</option>
+          </optgroup>
+          <optgroup label="Land">
+            <option value="land-sale">Land for Sale</option>
+            <option value="land-rent">Land for Rent</option>
+          </optgroup>
+        </select>
+        <select id="searchLocation" class="search__select district-select">
+          <option value="all">All Districts</option>
+        </select>
+        <button type="submit" class="btn btn--primary search__btn">
+          <i class="ti ti-search"></i> Search
+        </button>
+      </form>
+
+      <div class="hero__tags">
+        <span class="hero__tag-label">Popular:</span>
+        <span class="hero__tag" data-filter="kampala">Kampala</span>
+        <span class="hero__tag" data-filter="gulu">Gulu</span>
+        <span class="hero__tag" data-filter="mbarara">Mbarara</span>
+        <span class="hero__tag" data-filter="jinja">Jinja</span>
+        <span class="hero__tag" data-filter="entebbe">Entebbe</span>
+        <span class="hero__tag" data-filter="wakiso">Wakiso</span>
+      </div>
+    </div>
+
+    <!-- Slide navigation dots -->
+    <div class="hero__dots" id="heroDots">
+      <button class="hero__dot active" data-slide="0" aria-label="Slide 1"></button>
+      <button class="hero__dot" data-slide="1" aria-label="Slide 2"></button>
+      <button class="hero__dot" data-slide="2" aria-label="Slide 3"></button>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="hero__scroll">
+      <span>Scroll</span>
+      <i class="ti ti-chevron-down"></i>
+    </div>
+  </section>
+
+  
+  <section class="stats">
+    <div class="container stats__grid">
+      <div class="stats__item fade-in" data-count="120">
+        <div class="stats__number"><span class="counter">120</span>+</div>
+        <div class="stats__label">Plots Listed</div>
+      </div>
+      <div class="stats__item fade-in" data-count="85">
+        <div class="stats__number"><span class="counter">85</span>+</div>
+        <div class="stats__label">Houses for Rent</div>
+      </div>
+      <div class="stats__item fade-in" data-count="200">
+        <div class="stats__number"><span class="counter">200</span>+</div>
+        <div class="stats__label">Happy Clients</div>
+      </div>
+      <div class="stats__item fade-in" data-count="50">
+        <div class="stats__number"><span class="counter">50</span>+</div>
+        <div class="stats__label">Districts Covered</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FEATURED LAND ===================== -->
+  <section class="listings" id="land-listings">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="section-tag section-tag--sale">For Sale</span>
+          <h2 class="section-title">Featured Land &amp; Houses for Sale</h2>
+          <div class="section-divider"></div>
+          <p class="section-sub" style="margin-top:.85rem">
+            Prime plots across Uganda — verified titles, fair prices, ready to transfer.
+          </p>
+        </div>
+        <a href="properties.html?type=land" class="btn btn--outline">
+          View All Land <i class="ti ti-arrow-right"></i>
+        </a>
+      </div>
+      <div class="listings__grid" id="landGrid"></div>
+    </div>
+  </section>
+
+  
+  <div class="mid-banner">
+    <div class="container mid-banner__inner">
+      <div class="mid-banner__text">
+        <h3>Looking for something specific?</h3>
+        <p>Our team covers all districts across Uganda. Tell us what you need.</p>
+      </div>
+      <a href="contact.html" class="btn btn--white">
+        <i class="ti ti-phone"></i> Contact Us Now
+      </a>
+    </div>
+  </div>
+
+  <!-- ===================== FEATURED RENTALS ===================== -->
+  <section class="listings listings--alt" id="rental-listings">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="section-tag section-tag--rent">For Rent</span>
+          <h2 class="section-title">Houses &amp; Land for Rent</h2>
+          <div class="section-divider"></div>
+          <p class="section-sub" style="margin-top:.85rem">
+            Self-contained rooms to full family homes — available across Uganda.
+          </p>
+        </div>
+        <a href="properties.html?type=rent" class="btn btn--outline">
+          View All Rentals <i class="ti ti-arrow-right"></i>
+        </a>
+      </div>
+      <div class="listings__grid" id="rentGrid"></div>
+    </div>
+  </section>
+
+  <!-- ===================== TESTIMONIES PREVIEW ===================== -->
+  <section class="testimonies">
+    <div class="container">
+      <div class="section-header section-header--center">
+        <span class="section-tag section-tag--light">Client Reviews</span>
+        <h2 class="section-title section-title--light">What Our Clients Say</h2>
+        <div class="section-divider"></div>
+        <p class="section-sub section-sub--light" style="margin-top:.85rem">
+          Real stories from real people across Uganda.
+        </p>
+      </div>
+
+      <div class="testimonies__grid">
+        <div class="testi-card fade-in">
+          <div class="testi-card__stars">★★★★★</div>
+          <p class="testi-card__text">
+            "Found my dream plot in Layibi within two weeks. The process was smooth,
+            transparent, and the title deed was ready on time. Highly recommended!"
+          </p>
+          <div class="testi-card__author">
+            <div class="avatar">AO</div>
+            <div>
+              <div class="testi-card__name">Akello Olivia</div>
+              <div class="testi-card__loc"><i class="ti ti-map-pin"></i> Layibi, Gulu</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testi-card fade-in">
+          <div class="testi-card__stars">★★★★★</div>
+          <p class="testi-card__text">
+            "Rented a house in Laroo through Ker Properties. Excellent service,
+            fair prices, and the house was exactly as advertised. Will use again."
+          </p>
+          <div class="testi-card__author">
+            <div class="avatar">OK</div>
+            <div>
+              <div class="testi-card__name">Okello Kevin</div>
+              <div class="testi-card__loc"><i class="ti ti-map-pin"></i> Laroo, Gulu</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testi-card fade-in">
+          <div class="testi-card__stars">★★★★★</div>
+          <p class="testi-card__text">
+            "Bought 2 acres in Mbarara City. Professional team, honest pricing,
+            and the transfer was completed faster than I expected. 10 out of 10."
+          </p>
+          <div class="testi-card__author">
+            <div class="avatar">AM</div>
+            <div>
+              <div class="testi-card__name">Auma Margaret</div>
+              <div class="testi-card__loc"><i class="ti ti-map-pin"></i> Mbarara</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:2.75rem">
+        <a href="testimonies.html" class="btn btn--outline-white">
+          Read All Reviews <i class="ti ti-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT PREVIEW ===================== -->
+  <section class="contact">
+    <div class="container contact__inner">
+
+      <div class="contact__info fade-in">
+        <span class="section-tag">Get In Touch</span>
+        <h2 class="section-title">Talk to Our Team</h2>
+        <div class="section-divider"></div>
+        <p class="contact__desc" style="margin-top:1rem">
+          We cover all districts across Uganda. Whether you want to buy land,
+          rent a house, or need a consultation — we are available
+          Monday to Saturday, 8 am – 6 pm.
+        </p>
+
+        <div class="contact__details">
+          <div class="contact__detail-item">
+            <div class="contact__icon"><i class="ti ti-phone"></i></div>
+            <div>
+              <div class="contact__detail-label">Phone / WhatsApp</div>
+              <div class="contact__detail-val">+256 7XX XXX XXX</div>
+            </div>
+          </div>
+          <div class="contact__detail-item">
+            <div class="contact__icon"><i class="ti ti-mail"></i></div>
+            <div>
+              <div class="contact__detail-label">Email</div>
+              <div class="contact__detail-val">info@kerproperties.ug</div>
+            </div>
+          </div>
+          <div class="contact__detail-item">
+            <div class="contact__icon"><i class="ti ti-map-pin"></i></div>
+            <div>
+              <div class="contact__detail-label">Head Office</div>
+              <div class="contact__detail-val">Gulu City, Northern Uganda</div>
+            </div>
+          </div>
+          <div class="contact__detail-item">
+            <div class="contact__icon"><i class="ti ti-clock"></i></div>
+            <div>
+              <div class="contact__detail-label">Working Hours</div>
+              <div class="contact__detail-val">Mon – Sat: 8 am – 6 pm</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:2rem">
+          <a href="contact.html" class="btn btn--primary">
+            <i class="ti ti-message"></i> Full Contact Page
+          </a>
+        </div>
+      </div>
+
+      <form
+        class="contact__form fade-in"
+        id="contactForm"
+        name="contact"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+      >
+        <input type="hidden" name="form-name" value="contact" />
+        <p style="display:none"><label>Skip: <input name="bot-field" /></label></p>
+
+        <h3 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:700;
+                   color:var(--text-primary);margin-bottom:1.5rem;padding-bottom:1rem;
+                   border-bottom:1px solid var(--silver-light)">
+          Send Us a Message
+        </h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">Full Name <span class="req">*</span></label>
+            <input type="text" id="fname" name="name" placeholder="Your full name" required />
+          </div>
+          <div class="form-group">
+            <label for="fphone">Phone / WhatsApp <span class="req">*</span></label>
+            <input type="tel" id="fphone" name="phone" placeholder="+256 7XX XXX XXX" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="femail">Email Address</label>
+          <input type="email" id="femail" name="email" placeholder="your@email.com" />
+        </div>
+
+        <div class="form-group">
+          <label for="finterest">I am interested in</label>
+          <select id="finterest" name="interest">
+            <option value="">Select an option</option>
+            <option value="land">Buying Land</option>
+            <option value="rent">Renting a House</option>
+            <option value="both">Both Land &amp; Rent</option>
+            <option value="other">General Enquiry</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="fmessage">Message <span class="req">*</span></label>
+          <textarea id="fmessage" name="message" rows="4"
+            placeholder="Tell us what you are looking for…" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--full" id="contactSubmitBtn">
+          <i class="ti ti-send"></i> Send Message
+        </button>
+        <div class="form-status" id="formStatus"></div>
+      </form>
+    </div>
+  </section>
+
+  
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div class="footer__brand">
+        <a href="index.html" class="footer__logo">
+          <img src="kpLogo-icon-white.png" alt="Ker Properties" />
+          <div class="logo-wordmark">
+            <span class="logo-text">Ker</span>
+            <span class="logo-sub">Properties</span>
+          </div>
+        </a>
+        <p class="footer__desc">
+          Trusted real estate services across all districts of Uganda.
+          Your property journey starts here.
+        </p>
+        <div class="footer__socials">
+          <a href="https://facebook.com/YOUR_PAGE" target="_blank" rel="noopener"
+             class="social-link" aria-label="Facebook"><i class="ti ti-brand-facebook"></i></a>
+          <a href="https://wa.me/2567XXXXXXXX" target="_blank" rel="noopener"
+             class="social-link" aria-label="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>
+          <a href="https://instagram.com/YOUR_HANDLE" target="_blank" rel="noopener"
+             class="social-link" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+          <a href="https://linkedin.com/company/YOUR_PAGE" target="_blank" rel="noopener"
+             class="social-link" aria-label="LinkedIn"><i class="ti ti-brand-linkedin"></i></a>
+          <a href="https://tiktok.com/@YOUR_HANDLE" target="_blank" rel="noopener"
+             class="social-link" aria-label="TikTok"><i class="ti ti-brand-tiktok"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Quick Links</h4>
+        <ul class="footer__list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="properties.html">Properties</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="testimonies.html">Testimonies</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Services</h4>
+        <ul class="footer__list">
+          <li><a href="properties.html?type=land">Land for Sale</a></li>
+          <li><a href="properties.html?type=rent">Houses for Rent</a></li>
+          <li><a href="about.html#services">Property Consultation</a></li>
+          <li><a href="about.html#services">Site Visits</a></li>
+          <li><a href="about.html#services">Title Verification</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Contact</h4>
+        <ul class="footer__list footer__list--plain">
+          <li><i class="ti ti-map-pin"></i> Gulu City, Uganda</li>
+          <li><i class="ti ti-clock"></i> Mon–Sat: 8 am – 6 pm</li>
+          <li><i class="ti ti-phone"></i> +256 7XX XXX XXX</li>
+          <li><i class="ti ti-mail"></i> info@kerproperties.ug</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="container footer__bottom-inner">
+        <span>&copy; 2026 Ker Properties. All rights reserved.</span>
+        <span>Serving all districts of Uganda 🇺🇬</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="ti ti-arrow-up"></i>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabase.js"></script>
+  <script src="main.js"></script>
+  <script>
+    /* ── Hero photo slideshow with Ken Burns effect ── */
+    (function() {
+      const slides    = document.querySelectorAll(".hero__slide");
+      const dots      = document.querySelectorAll(".hero__dot");
+      let   current   = 0;
+      let   autoTimer = null;
+
+      /* Lazy-load slides 2 and 3 after the page has painted slide 1.
+         The browser only needs hero1.jpg on first load; hero2 and hero3
+         are fetched quietly in the background so they're ready by the
+         time the slideshow rotates to them (every 6 seconds). */
+      function lazyLoadRemainingSlides() {
+        if (slides[1]) slides[1].style.backgroundImage = "url('hero2.jpg')";
+        if (slides[2]) slides[2].style.backgroundImage = "url('hero3.jpg')";
+      }
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(lazyLoadRemainingSlides, { timeout: 1500 });
+      } else {
+        setTimeout(lazyLoadRemainingSlides, 800);
+      }
+
+      function goTo(idx) {
+        /* Remove active from current */
+        slides[current].classList.remove("active");
+        dots[current].classList.remove("active");
+
+        /* Force reflow so animation restarts on next slide */
+        slides[idx].style.animation = "none";
+        slides[idx].offsetHeight; /* trigger reflow */
+        slides[idx].style.animation = "";
+
+        current = idx;
+        slides[current].classList.add("active");
+        dots[current].classList.add("active");
+      }
+
+      function nextSlide() {
+        goTo((current + 1) % slides.length);
+      }
+
+      function startAuto() {
+        clearInterval(autoTimer);
+        autoTimer = setInterval(nextSlide, 6000); /* change every 6s */
+      }
+
+      /* Dot clicks */
+      dots.forEach(dot => {
+        dot.addEventListener("click", () => {
+          goTo(parseInt(dot.dataset.slide, 10));
+          startAuto(); /* reset timer after manual nav */
+        });
+      });
+
+      /* Keyboard navigation */
+      document.addEventListener("keydown", e => {
+        if (e.key === "ArrowRight") { goTo((current + 1) % slides.length); startAuto(); }
+        if (e.key === "ArrowLeft")  { goTo((current - 1 + slides.length) % slides.length); startAuto(); }
+      });
+
+      /* Touch / swipe support */
+      let touchStartX = 0;
+      const hero = document.querySelector(".hero");
+      hero?.addEventListener("touchstart", e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+      hero?.addEventListener("touchend", e => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) {
+          goTo(diff > 0
+            ? (current + 1) % slides.length
+            : (current - 1 + slides.length) % slides.length);
+          startAuto();
+        }
+      }, { passive: true });
+
+      /* Start auto-play */
+      startAuto();
+    })();
+  </script>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       Hidden Netlify Forms stub — DO NOT REMOVE.
+       The real property-enquiry form is built dynamically in JavaScript
+       (see openDetailModal() in main.js) when a visitor clicks "Details"
+       on a listing. Netlify Forms only detects forms present in the
+       static HTML at deploy time — it cannot see forms created by
+       JavaScript at runtime. This invisible stub has the exact same
+       name and field set, purely so Netlify's build-time crawler
+       registers "property-enquiry" as a known form and sets up email
+       notifications for it. It is never shown or submitted directly.
+       ════════════════════════════════════════════════════════════════ -->
+  <form name="property-enquiry" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="property-enquiry" />
+    <input type="text" name="property_title" />
+    <input type="text" name="property_location" />
+    <input type="text" name="property_price" />
+    <input type="text" name="property_type" />
+    <input type="text" name="name" />
+    <input type="tel" name="phone" />
+    <input type="email" name="email" />
+    <textarea name="message"></textarea>
+    <input name="bot-field" />
+  </form>
+</body>
+</html>

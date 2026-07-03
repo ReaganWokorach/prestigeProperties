@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Browse all land for sale and houses for rent across Uganda — Ker Properties." />
+  <title>Properties | Ker Properties</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.44.0/dist/tabler-icons.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  
+  <header class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <a href="index.html" class="navbar__logo">
+        <img src="kpLogo-icon.png" alt="Ker Properties Logo" />
+        <div class="logo-wordmark">
+          <span class="logo-text">Ker</span>
+          <span class="logo-sub">Properties</span>
+        </div>
+      </a>
+
+      <nav class="navbar__links" id="navLinks">
+        <a href="index.html"       class="nav-link">Home</a>
+        <a href="properties.html"  class="nav-link">Properties</a>
+        <a href="about.html"       class="nav-link">About</a>
+        <a href="contact.html"     class="nav-link">Contact</a>
+        <a href="testimonies.html" class="nav-link">Testimonies</a>
+      </nav>
+
+      <div class="navbar__actions">
+        <a href="cart.html" class="btn btn--ghost cart-btn" title="Enquiry List">
+          <i class="ti ti-shopping-cart"></i>
+          <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+        </a>
+        <a href="admin.html" class="btn btn--primary">
+          <i class="ti ti-shield-lock"></i> Admin
+        </a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===================== PAGE HERO ===================== -->
+  <section class="page-hero">
+    <div class="container page-hero__inner">
+      <div class="page-hero__badge">
+        <i class="ti ti-building-estate"></i> Browse Listings
+      </div>
+      <h1 class="page-hero__title">All <span>Properties</span></h1>
+      <p class="page-hero__sub">
+        Land for sale and houses for rent across all districts of Uganda.
+        Every listing verified by our team.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== PROPERTIES ===================== -->
+  <section class="properties-page">
+    <div class="container">
+
+      <!-- Filter / Search Bar -->
+      <form class="properties-filter-bar" id="searchForm" novalidate>
+
+        <span class="filter-label">Filter:</span>
+
+        <!-- Type filter buttons -->
+        <button type="button" class="filter-btn active" data-type="all">
+          <i class="ti ti-layout-grid"></i> All
+        </button>
+        <button type="button" class="filter-btn" data-type="house-rent">
+          <i class="ti ti-home"></i> Houses for Rent
+        </button>
+        <button type="button" class="filter-btn" data-type="house-sale">
+          <i class="ti ti-home-move"></i> Houses for Sale
+        </button>
+        <button type="button" class="filter-btn" data-type="land-sale">
+          <i class="ti ti-map-pin"></i> Land for Sale
+        </button>
+        <button type="button" class="filter-btn" data-type="land-rent">
+          <i class="ti ti-map"></i> Land for Rent
+        </button>
+
+        <div class="filter-divider"></div>
+
+        <!-- District dropdown — fully populated by main.js -->
+        <select class="filter-select district-select" id="filterLocation">
+          <option value="all">All Districts</option>
+        </select>
+
+        <!-- Hidden inputs wired to handleSearch() -->
+        <input type="hidden" id="searchType"     value="all" />
+        <input type="hidden" id="searchLocation" value="all" />
+
+        <!-- Keyword search -->
+        <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px;
+                    background:var(--off-white);border:1.5px solid var(--silver-light);
+                    border-radius:var(--radius-sm);padding:0 0.85rem;
+                    transition:border-color var(--transition);"
+             onfocusin="this.style.borderColor='var(--navy)'"
+             onfocusout="this.style.borderColor='var(--silver-light)'">
+          <i class="ti ti-search" style="color:var(--purple-light);font-size:1rem;flex-shrink:0"></i>
+          <input
+            type="text"
+            id="searchInput"
+            class="search__input"
+            placeholder="Search by name, district, feature…"
+            autocomplete="off"
+            style="border:none;background:transparent;outline:none;
+                   width:100%;font-size:.875rem;padding:.6rem 0;"
+          />
+        </div>
+
+        <button type="submit" class="btn btn--primary"
+          style="padding:.5rem 1.1rem;font-size:.83rem">
+          <i class="ti ti-search"></i> Search
+        </button>
+
+        <span class="filter-count" id="filterCount">Loading…</span>
+      </form>
+
+      <!-- Results grid — cards rendered by main.js
+           Heart calls toggleCart(id), Details calls openDetailModal(id) -->
+      <div class="listings__grid" id="allPropertiesGrid">
+        <!-- Injected by renderPropertyPage() in main.js -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== CTA BANNER ===================== -->
+  <div class="mid-banner">
+    <div class="container mid-banner__inner">
+      <div class="mid-banner__text">
+        <h3>Can't find what you're looking for?</h3>
+        <p>Contact our team and we'll source the right property for you — anywhere in Uganda.</p>
+      </div>
+      <a href="contact.html" class="btn btn--white">
+        <i class="ti ti-phone"></i> Talk to Us
+      </a>
+    </div>
+  </div>
+
+  
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div class="footer__brand">
+        <a href="index.html" class="footer__logo">
+          <img src="kpLogo-icon-white.png" alt="Ker Properties" />
+          <div class="logo-wordmark">
+            <span class="logo-text">Ker</span>
+            <span class="logo-sub">Properties</span>
+          </div>
+        </a>
+        <p class="footer__desc">
+          Trusted real estate services across all districts of Uganda.
+          Your property journey starts here.
+        </p>
+        <div class="footer__socials">
+          <a href="https://facebook.com/YOUR_PAGE" target="_blank" rel="noopener"
+             class="social-link" aria-label="Facebook"><i class="ti ti-brand-facebook"></i></a>
+          <a href="https://wa.me/2567XXXXXXXX" target="_blank" rel="noopener"
+             class="social-link" aria-label="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>
+          <a href="https://instagram.com/YOUR_HANDLE" target="_blank" rel="noopener"
+             class="social-link" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+          <a href="https://linkedin.com/company/YOUR_PAGE" target="_blank" rel="noopener"
+             class="social-link" aria-label="LinkedIn"><i class="ti ti-brand-linkedin"></i></a>
+          <a href="https://tiktok.com/@YOUR_HANDLE" target="_blank" rel="noopener"
+             class="social-link" aria-label="TikTok"><i class="ti ti-brand-tiktok"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Quick Links</h4>
+        <ul class="footer__list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="properties.html">Properties</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="testimonies.html">Testimonies</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Services</h4>
+        <ul class="footer__list">
+          <li><a href="properties.html?type=land">Land for Sale</a></li>
+          <li><a href="properties.html?type=rent">Houses for Rent</a></li>
+          <li><a href="about.html#services">Property Consultation</a></li>
+          <li><a href="about.html#services">Site Visits</a></li>
+          <li><a href="about.html#services">Title Verification</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Contact</h4>
+        <ul class="footer__list footer__list--plain">
+          <li><i class="ti ti-map-pin"></i> Gulu City, Uganda</li>
+          <li><i class="ti ti-clock"></i> Mon–Sat: 8 am – 6 pm</li>
+          <li><i class="ti ti-phone"></i> +256 7XX XXX XXX</li>
+          <li><i class="ti ti-mail"></i> info@kerproperties.ug</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="container footer__bottom-inner">
+        <span>&copy; 2026 Ker Properties. All rights reserved.</span>
+        <span>Serving all districts of Uganda 🇺🇬</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast & Back-to-top -->
+  <div class="toast" id="toast"></div>
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="ti ti-arrow-up"></i>
+  </button>
+
+  <!-- main.js at bottom so all DOM elements exist before scripts run -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabase.js"></script>
+  <script src="main.js"></script>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       Hidden Netlify Forms stub — DO NOT REMOVE.
+       The real property-enquiry form is built dynamically in JavaScript
+       (see openDetailModal() in main.js) when a visitor clicks "Details"
+       on a listing. Netlify Forms only detects forms present in the
+       static HTML at deploy time — it cannot see forms created by
+       JavaScript at runtime. This invisible stub has the exact same
+       name and field set, purely so Netlify's build-time crawler
+       registers "property-enquiry" as a known form and sets up email
+       notifications for it. It is never shown or submitted directly.
+       ════════════════════════════════════════════════════════════════ -->
+  <form name="property-enquiry" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="property-enquiry" />
+    <input type="text" name="property_title" />
+    <input type="text" name="property_location" />
+    <input type="text" name="property_price" />
+    <input type="text" name="property_type" />
+    <input type="text" name="name" />
+    <input type="tel" name="phone" />
+    <input type="email" name="email" />
+    <textarea name="message"></textarea>
+    <input name="bot-field" />
+  </form>
+</body>
+</html>

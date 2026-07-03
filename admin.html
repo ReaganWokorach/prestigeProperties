@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Admin dashboard — Ker Properties." />
+  <title>Admin | Ker Properties</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.44.0/dist/tabler-icons.min.css" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ── Tab system ── */
+    .admin-tabs { display:flex; gap:.25rem; margin-bottom:2rem; border-bottom:2px solid var(--silver-light); flex-wrap:wrap; }
+    .admin-tab { padding:.65rem 1.1rem; font-size:.875rem; font-weight:500; color:var(--text-muted); cursor:pointer; border:none; background:none; border-bottom:2px solid transparent; margin-bottom:-2px; transition:all var(--transition); display:flex; align-items:center; gap:6px; font-family:var(--font-sans); border-radius:var(--radius-sm) var(--radius-sm) 0 0; }
+    .admin-tab:hover { color:var(--purple); background:var(--purple-pale); }
+    .admin-tab.active { color:var(--purple); border-bottom-color:var(--purple); font-weight:600; }
+    .tab-badge { background:var(--navy); color:var(--white); font-size:.65rem; font-weight:700; padding:1px 7px; border-radius:100px; font-family:var(--font-sans); }
+    .admin-panel { display:none; }
+    .admin-panel.active { display:block; }
+
+    /* ── Welcome banner ── */
+    .admin-welcome { background:linear-gradient(135deg,var(--purple-deep) 0%,var(--navy) 60%,var(--purple-mid) 100%); border-radius:var(--radius-md); padding:1.5rem 2rem; margin-bottom:2rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; position:relative; overflow:hidden; }
+    .admin-welcome::before { content:''; position:absolute; inset:0; background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); pointer-events:none; }
+    .admin-welcome__text { position:relative; }
+    .admin-welcome__text h2 { font-family:var(--font-serif); font-size:1.4rem; color:var(--white); font-weight:700; margin-bottom:.25rem; }
+    .admin-welcome__text p { font-size:.85rem; color:rgba(255,255,255,.65); }
+    .admin-welcome__actions { display:flex; gap:.75rem; flex-wrap:wrap; position:relative; }
+    .btn--logout { background:rgba(255,255,255,.12); color:var(--white); border:1.5px solid rgba(255,255,255,.3); }
+    .btn--logout:hover { background:rgba(255,255,255,.22); border-color:rgba(255,255,255,.55); }
+
+    /* ── Table search ── */
+    .admin-search { display:flex; align-items:center; gap:.75rem; margin-bottom:1.25rem; flex-wrap:wrap; }
+    .admin-search-input { flex:1; min-width:200px; padding:.55rem 1rem; border:1.5px solid var(--silver-light); border-radius:var(--radius-sm); font-size:.875rem; color:var(--text-primary); background:var(--off-white); outline:none; transition:border-color var(--transition); font-family:var(--font-sans); }
+    .admin-search-input:focus { border-color:var(--purple); }
+
+    /* ── Photo upload ── */
+    .photo-upload-area { border:2px dashed var(--silver-light); border-radius:var(--radius-md); padding:1.5rem; text-align:center; cursor:pointer; transition:all var(--transition); background:var(--off-white); margin-bottom:.75rem; }
+    .photo-upload-area:hover { border-color:var(--purple); background:var(--purple-pale); }
+    .photo-upload-area i { font-size:2rem; color:var(--purple-light); display:block; margin-bottom:.5rem; opacity:.6; }
+    .photo-upload-area p { font-size:.82rem; color:var(--text-muted); }
+    .photo-upload-area input[type="file"] { display:none; }
+    .photo-preview-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:.65rem; margin-top:.75rem; }
+    .photo-thumb { position:relative; height:90px; border-radius:var(--radius-sm); overflow:hidden; background:var(--purple-pale); border:1px solid var(--silver-light); }
+    .photo-thumb img { width:100%; height:100%; object-fit:cover; }
+    .photo-thumb__del { position:absolute; top:4px; right:4px; background:rgba(155,28,28,.85); color:var(--white); border:none; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:.7rem; cursor:pointer; }
+    .photo-thumb__del:hover { background:#7B1414; }
+    .photo-count-note { font-size:.75rem; color:var(--text-muted); margin-top:.35rem; display:block; }
+
+    /* ── Featured / available checkbox ── */
+    .check-group { display:flex; align-items:center; gap:.6rem; margin-bottom:1.15rem; }
+    .check-group input[type="checkbox"] { width:18px; height:18px; accent-color:var(--purple); cursor:pointer; }
+    .check-group label { font-size:.875rem; color:var(--text-primary); cursor:pointer; margin:0; }
+    .field-hint { font-size:.72rem; color:var(--text-muted); margin-top:.3rem; display:block; }
+
+    /* ── Inbox ── */
+    .inbox-toolbar { display:flex; align-items:center; gap:.75rem; margin-bottom:1.25rem; flex-wrap:wrap; }
+    .inbox-notice { background:var(--purple-pale); border:1px solid rgba(91,45,142,.18); border-radius:var(--radius-md); padding:.85rem 1.1rem; font-size:.82rem; color:var(--text-mid); line-height:1.6; display:flex; gap:.65rem; align-items:flex-start; margin-bottom:1.25rem; }
+    .inbox-notice i { color:var(--purple); font-size:1rem; flex-shrink:0; margin-top:1px; }
+    .inbox-list { display:flex; flex-direction:column; gap:.85rem; }
+    .inbox-msg { background:var(--white); border:1px solid var(--silver-light); border-radius:var(--radius-md); padding:1.15rem 1.35rem; box-shadow:var(--shadow-sm); }
+    .inbox-msg.unread { border-left:3px solid var(--navy); background:var(--purple-pale); }
+    .inbox-msg__header { display:flex; justify-content:space-between; align-items:center; margin-bottom:.5rem; flex-wrap:wrap; gap:.5rem; }
+    .inbox-msg__from { font-weight:600; font-size:.9rem; color:var(--text-primary); display:flex; align-items:center; gap:6px; }
+    .inbox-msg__time { font-size:.75rem; color:var(--text-muted); }
+    .inbox-msg__subject { font-size:.8rem; color:var(--purple); margin-bottom:.4rem; font-weight:500; }
+    .inbox-msg__body { font-size:.85rem; color:var(--text-mid); line-height:1.65; white-space:pre-wrap; }
+    .inbox-msg__meta { display:flex; gap:.65rem; margin-top:.75rem; flex-wrap:wrap; align-items:center; }
+    .inbox-msg__tag { font-size:.68rem; background:var(--purple-pale); color:var(--purple); padding:2px 8px; border-radius:100px; font-weight:500; border:1px solid rgba(91,45,142,.15); }
+    .inbox-del-btn { margin-left:auto; background:none; border:1.5px solid var(--silver-light); border-radius:var(--radius-sm); padding:.25rem .65rem; font-size:.75rem; color:var(--text-muted); cursor:pointer; transition:all var(--transition); font-family:var(--font-sans); display:flex; align-items:center; gap:4px; }
+    .inbox-del-btn:hover { background:var(--red-bg); border-color:var(--red-tag); color:var(--red-tag); }
+    .inbox-read-btn { background:none; border:1.5px solid var(--purple-light); border-radius:var(--radius-sm); padding:.25rem .65rem; font-size:.75rem; color:var(--purple); cursor:pointer; transition:all var(--transition); font-family:var(--font-sans); display:flex; align-items:center; gap:4px; }
+    .inbox-read-btn:hover { background:var(--purple-pale); }
+    .inbox-empty { text-align:center; padding:4rem; color:var(--text-muted); }
+    .inbox-empty i { font-size:2.5rem; display:block; margin-bottom:.75rem; color:var(--purple-light); opacity:.35; }
+
+    /* ── Inbox category filter pills (fix: Contact / Reviews / Enquiry) ── */
+    .inbox-cats { display:flex; gap:.5rem; margin-bottom:1.1rem; flex-wrap:wrap; }
+    .inbox-cat-btn { display:flex; align-items:center; gap:6px; padding:.45rem .95rem; border-radius:100px; border:1.5px solid var(--silver-light); background:var(--white); color:var(--text-mid); font-size:.82rem; font-weight:500; cursor:pointer; transition:all var(--transition); font-family:var(--font-sans); }
+    .inbox-cat-btn i { font-size:.9rem; }
+    .inbox-cat-btn:hover { border-color:var(--purple-light); color:var(--purple); }
+    .inbox-cat-btn.active { background:var(--purple); border-color:var(--purple); color:var(--white); }
+    .inbox-cat-btn .cat-count { background:rgba(0,0,0,.12); color:inherit; font-size:.68rem; font-weight:700; padding:1px 7px; border-radius:100px; }
+    .inbox-cat-btn.active .cat-count { background:rgba(255,255,255,.25); }
+
+    /* Color-coded category tags inside each message card */
+    .inbox-msg__tag--contact  { background:var(--blue-bg);  color:var(--blue-tag);  border-color:rgba(30,64,175,.18); }
+    .inbox-msg__tag--reviews  { background:#FFF4DE; color:#92600B; border-color:rgba(146,96,11,.2); }
+    .inbox-msg__tag--enquiry  { background:var(--green-bg); color:var(--green-tag); border-color:rgba(22,101,52,.18); }
+    .inbox-msg__cat-icon { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:.95rem; }
+    .inbox-msg__cat-icon--contact { background:var(--blue-bg); color:var(--blue-tag); }
+    .inbox-msg__cat-icon--reviews { background:#FFF4DE; color:#92600B; }
+    .inbox-msg__cat-icon--enquiry { background:var(--green-bg); color:var(--green-tag); }
+    .inbox-msg__rating { color:#C9952F; font-size:.8rem; letter-spacing:1px; margin-bottom:.35rem; }
+
+    
+    .account-section { max-width:560px; }
+    .pw-strength { height:4px; border-radius:2px; margin-top:.35rem; transition:all var(--transition); background:var(--silver-light); width:0; }
+    .pw-strength.weak   { background:#e74c3c; width:30%; }
+    .pw-strength.fair   { background:#f39c12; width:60%; }
+    .pw-strength.strong { background:var(--green-tag); width:100%; }
+    .pw-strength-label { font-size:.72rem; color:var(--text-muted); margin-top:2px; }
+
+    .action-cell { display:flex; gap:.35rem; flex-wrap:wrap; }
+    .table-empty { text-align:center; padding:3rem; color:var(--text-muted); }
+    .table-empty i { font-size:2rem; display:block; margin-bottom:.75rem; color:var(--purple-light); opacity:.35; }
+  </style>
+  <style>
+    /* ══ Admin mobile responsiveness ══════════════════════════════════════ */
+
+    /* Prevent any element from forcing the page to scroll sideways */
+    html, body { overflow-x: hidden; max-width: 100vw; }
+
+    /* Tabs: on small screens, wrap into a clean grid of chips so every tab
+       (All Listings, Add Listing, Team, Messages, My Account, Admins,
+       Settings) is visible at once — no horizontal scrolling required. */
+    @media (max-width: 768px) {
+      .admin-tabs {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: .5rem;
+        flex-wrap: wrap;
+        overflow-x: visible;
+        border-bottom: none;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0;
+      }
+      .admin-tab {
+        flex-direction: column;
+        flex-shrink: 1;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        white-space: normal;
+        line-height: 1.2;
+        gap: 5px;
+        padding: .7rem .4rem;
+        font-size: .72rem;
+        min-height: 62px;
+        border: 1.5px solid var(--silver-light);
+        border-radius: var(--radius-sm);
+        background: var(--white);
+        color: var(--text-mid);
+        margin-bottom: 0;
+      }
+      .admin-tab i { font-size: 1.1rem; }
+      .admin-tab:hover { background: var(--purple-pale); color: var(--purple); }
+      .admin-tab.active {
+        background: var(--purple);
+        border-color: var(--purple);
+        color: var(--white);
+      }
+      .admin-tab .tab-badge { background: rgba(255,255,255,.9); color: var(--purple-deep); }
+      .admin-tab:not(.active) .tab-badge { background: var(--navy); color: var(--white); }
+
+      /* Welcome banner: stack on mobile */
+      .admin-welcome { padding: 1.15rem 1.25rem; gap: .75rem; }
+      .admin-welcome__text h2 { font-size: 1.15rem; }
+      .admin-welcome__actions { gap: .5rem; }
+      .admin-welcome__actions .btn { padding: .45rem .85rem; font-size: .8rem; }
+
+      /* Stat tiles: 2-column grid on mobile */
+      .admin-stats { grid-template-columns: repeat(2, 1fr); gap: .65rem; margin-bottom: 1.5rem; }
+
+      /* Form sections: reduce padding, never overflow the viewport width */
+      .admin-form-section { padding: 1.25rem; max-width: 100%; }
+
+      /* All form-row grids collapse to single column */
+      .admin-form-section .form-row,
+      [style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
+
+      /* Inline two-column password row inside admins tab */
+      #addAdminForm .form-row { display: grid; grid-template-columns: 1fr !important; }
+
+      /* Action buttons in table: wrap tightly */
+      .action-cell { gap: .25rem; }
+
+      /* Search bar: full width */
+      .admin-search { flex-direction: column; align-items: stretch; }
+      .admin-search-input { min-width: 0; }
+
+      /* Inbox toolbar: wrap */
+      .inbox-toolbar { gap: .5rem; }
+      .inbox-cats { gap: .35rem; }
+      .inbox-cat-btn { padding: .38rem .7rem; font-size: .76rem; }
+
+      /* Admin main: reduce horizontal padding, and make sure nothing
+         (tables, wide inline-styled grids, long text) can push the page
+         wider than the viewport */
+      main.section { padding-top: 1.5rem; }
+      .container { padding-inline: 1rem; max-width: 100%; }
+      .admin-page { padding-inline: 1rem; }
+    }
+
+    @media (max-width: 480px) {
+      .admin-stats { grid-template-columns: repeat(2, 1fr); gap: .5rem; }
+      .admin-stat { padding: 1rem; }
+      .admin-stat__val { font-size: 1.4rem; }
+      .admin-tabs { grid-template-columns: repeat(2, 1fr); gap: .45rem; }
+      .admin-tab { padding: .6rem .35rem; font-size: .7rem; gap: 4px; min-height: 56px; }
+      .admin-tab i { font-size: 1rem; }
+      .admin-welcome__text h2 { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Admin access is enforced by kpRequireAdmin() in main.js, which checks
+       the real Supabase Auth session (server-verified JWT) and redirects to
+       login.html if there is none. This is real authentication, not a
+       client-side flag that anyone could fake by editing localStorage. -->
+  <style>
+    /* Hide admin content until auth is confirmed — prevents any flash of
+       data before a redirect to login.html for unauthenticated visitors. */
+    body:not(.kp-auth-ok) .admin-page { display: none !important; }
+  </style>
+  <script>
+    /* Show content only after a verified Supabase session exists.
+       Runs as soon as the Supabase client is available (after supabase.js loads). */
+    window.addEventListener("DOMContentLoaded", async () => {
+      try {
+        const session = await kpGetSession();
+        if (session) {
+          document.body.classList.add("kp-auth-ok");
+        }
+        /* If no session, initAdmin() in main.js will redirect to login.html shortly after. */
+      } catch (e) {
+        /* Supabase not reachable — main.js guard will redirect. */
+      }
+    });
+  </script>
+
+  
+  <header class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <a href="index.html" class="navbar__logo">
+        <img src="kpLogo-icon.png" alt="Ker Properties Logo" />
+        <div class="logo-wordmark">
+          <span class="logo-text">Ker</span>
+          <span class="logo-sub">Properties</span>
+        </div>
+      </a>
+
+      <nav class="navbar__links" id="navLinks">
+        <a href="index.html"       class="nav-link">Home</a>
+        <a href="properties.html"  class="nav-link">Properties</a>
+        <a href="about.html"       class="nav-link">About</a>
+        <a href="contact.html"     class="nav-link">Contact</a>
+        <a href="testimonies.html" class="nav-link">Testimonies</a>
+      </nav>
+
+      <div class="navbar__actions">
+        <a href="cart.html" class="btn btn--ghost cart-btn" title="Enquiry List">
+          <i class="ti ti-shopping-cart"></i>
+          <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+        </a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===================== ADMIN DASHBOARD ===================== -->
+  <main class="admin-page">
+    <div class="container">
+
+      <!-- Welcome banner -->
+      <div class="admin-welcome">
+        <div class="admin-welcome__text">
+          <h2><i class="ti ti-shield-check" style="margin-right:8px"></i>Admin Dashboard</h2>
+          <p>Manage listings, view client messages, and update your account settings.</p>
+        </div>
+        <div class="admin-welcome__actions">
+          <a href="properties.html" target="_blank" class="btn btn--logout" style="font-size:.82rem">
+            <i class="ti ti-external-link"></i> View Site
+          </a>
+          <button class="btn btn--logout" onclick="handleLogout()">
+            <i class="ti ti-logout"></i> Sign Out
+          </button>
+        </div>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="admin-stats">
+
+        
+        <div class="admin-stat fade-in">
+          <div class="admin-stat__icon"><i class="ti ti-map-pin"></i></div>
+          <div class="admin-stat__val" id="adminLandSaleCount">—</div>
+          <div class="admin-stat__label">Land for Sale</div>
+        </div>
+
+        
+        <div class="admin-stat fade-in">
+          <div class="admin-stat__icon"><i class="ti ti-map"></i></div>
+          <div class="admin-stat__val" id="adminLandRentCount">—</div>
+          <div class="admin-stat__label">Land for Rent</div>
+        </div>
+
+        
+        <div class="admin-stat fade-in">
+          <div class="admin-stat__icon"><i class="ti ti-home-move"></i></div>
+          <div class="admin-stat__val" id="adminHouseSaleCount">—</div>
+          <div class="admin-stat__label">Houses for Sale</div>
+        </div>
+
+        
+        <div class="admin-stat fade-in">
+          <div class="admin-stat__icon"><i class="ti ti-home"></i></div>
+          <div class="admin-stat__val" id="adminHouseRentCount">—</div>
+          <div class="admin-stat__label">Houses for Rent</div>
+        </div>
+
+        
+        <div class="admin-stat fade-in" style="border-top:2px solid var(--purple);padding-top:calc(1.25rem - 2px)">
+          <div class="admin-stat__icon" style="background:var(--purple);color:#fff"><i class="ti ti-building-estate"></i></div>
+          <div class="admin-stat__val" id="adminTotalCount">—</div>
+          <div class="admin-stat__label">Total Listings</div>
+        </div>
+
+        
+        <div class="admin-stat fade-in">
+          <div class="admin-stat__icon">
+            <svg class="admin-stat-icon-svg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z"/>
+            </svg>
+          </div>
+          <div class="admin-stat__val" id="adminFeaturedCount">—</div>
+          <div class="admin-stat__label">Featured</div>
+        </div>
+
+        
+        <div class="admin-stat fade-in">
+          <div class="admin-stat__icon"><i class="ti ti-mail"></i></div>
+          <div class="admin-stat__val" id="adminMsgCount">—</div>
+          <div class="admin-stat__label">Messages</div>
+        </div>
+
+      </div>
+
+      <!-- Tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="listings">
+          <i class="ti ti-table"></i> All Listings
+        </button>
+        <button class="admin-tab" data-tab="add">
+          <i class="ti ti-plus"></i> Add Listing
+        </button>
+        <button class="admin-tab" data-tab="team">
+          <i class="ti ti-users"></i> Team
+        </button>
+        <button class="admin-tab" data-tab="inbox">
+          <i class="ti ti-mail"></i> Messages
+          <span class="tab-badge" id="inboxBadge" style="display:none">0</span>
+        </button>
+        <button class="admin-tab" data-tab="account">
+          <i class="ti ti-user-cog"></i> My Account
+        </button>
+        <button class="admin-tab" data-tab="admins">
+          <i class="ti ti-shield-lock"></i> Admins
+        </button>
+        <button class="admin-tab" data-tab="settings">
+          <i class="ti ti-settings"></i> Settings
+        </button>
+      </div>
+
+      <!-- ═══════════ TAB: ALL LISTINGS ═══════════ -->
+      <div class="admin-panel active" id="tab-listings">
+
+        <div class="admin-search">
+          <input class="admin-search-input" id="adminSearchInput"
+            placeholder="Search by title, location, type…"
+            oninput="filterAdminTable()" />
+          <select class="filter-select" id="adminTypeFilter"
+            onchange="filterAdminTable()" style="padding:.55rem .85rem">
+            <option value="all">All Types</option>
+            <option value="house-rent">Houses for Rent</option>
+            <option value="house-sale">Houses for Sale</option>
+            <option value="land-sale">Land for Sale</option>
+            <option value="land-rent">Land for Rent</option>
+          </select>
+          <select class="filter-select" id="adminStatusFilter"
+            onchange="filterAdminTable()" style="padding:.55rem .85rem">
+            <option value="all">All Status</option>
+            <option value="available">Available</option>
+            <option value="sold">Taken</option>
+          </select>
+        </div>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Photos</th>
+                <th>Featured</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminTableBody">
+              <tr><td colspan="8">
+                <div class="table-empty">
+                  <i class="ti ti-loader-2 ti-spin"></i> Loading…
+                </div>
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- ═══════════ TAB: ADD LISTING ═══════════ -->
+      <div class="admin-panel" id="tab-add">
+        <div class="admin-form-section">
+          <h3><i class="ti ti-plus" style="color:var(--purple);margin-right:6px"></i>Add New Property Listing</h3>
+
+          <form id="addListingForm" novalidate>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="al-type">Property Type <span class="req">*</span></label>
+                <select id="al-type" name="type" required>
+                  <option value="house-rent">House for Rent</option>
+                  <option value="house-sale">House for Sale</option>
+                  <option value="land-sale">Land for Sale</option>
+                  <option value="land-rent">Land for Rent</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="al-locationKey">District <span class="req">*</span></label>
+                <select id="al-locationKey" name="locationKey" class="district-select" required>
+                  <option value="">Select district</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="al-title">Listing Title <span class="req">*</span></label>
+              <input type="text" id="al-title" name="title"
+                placeholder="e.g. 50×100ft Plot, Layibi Division" required />
+            </div>
+
+            <div class="form-group">
+              <label for="al-location">Full Location Description <span class="req">*</span></label>
+              <input type="text" id="al-location" name="location"
+                placeholder="e.g. Layibi Division, Gulu City" required />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="al-price">Price (UGX numbers only) <span class="req">*</span></label>
+                <input type="number" id="al-price" name="price"
+                  placeholder="e.g. 45000000" min="0" required />
+              </div>
+              <div class="form-group">
+                <label for="al-priceLabel">Price Label <span class="req">*</span></label>
+                <input type="text" id="al-priceLabel" name="priceLabel"
+                  placeholder="e.g. UGX 45,000,000" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="al-priceNote">Price Note</label>
+              <input type="text" id="al-priceNote" name="priceNote"
+                placeholder="e.g. Negotiable / Firm price / per month" />
+            </div>
+
+            <div class="form-group">
+              <label for="al-features">Key Features <span class="req">*</span></label>
+              <input type="text" id="al-features" name="features"
+                placeholder="e.g. 50×100ft, Titled, Near Road" required />
+              <span class="field-hint">Separate with commas. Maximum 3 features recommended.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="al-description">Description</label>
+              <textarea id="al-description" name="description" rows="3"
+                placeholder="Short description — title type, nearby landmarks, condition…"></textarea>
+            </div>
+
+            <!-- Photo upload -->
+            <div class="form-group">
+              <label>Property Photos</label>
+              <div class="photo-upload-area" id="photoUploadArea"
+                   onclick="document.getElementById('photoFileInput').click()">
+                <i class="ti ti-photo-plus"></i>
+                <p>Click to add photos, or drag &amp; drop here<br />
+                   <span style="font-size:.72rem;color:var(--purple)">JPG, PNG, WEBP — up to 10 photos</span>
+                </p>
+                <input type="file" id="photoFileInput" accept="image/*" multiple />
+              </div>
+              <div class="photo-preview-grid" id="photoPreviewGrid"></div>
+              <span class="photo-count-note" id="photoCountNote"></span>
+            </div>
+
+            <div class="check-group">
+              <input type="checkbox" id="al-featured" name="featured" />
+              <label for="al-featured">
+                <i class="ti ti-star" style="color:var(--purple);font-size:.9rem;margin-right:3px"></i>
+                Mark as Featured — appears on home page
+              </label>
+            </div>
+
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
+              <button type="submit" class="btn btn--primary">
+                <i class="ti ti-plus"></i> Add Listing
+              </button>
+              <button type="reset" class="btn btn--outline" onclick="clearPhotoPreview()">
+                <i class="ti ti-x"></i> Clear Form
+              </button>
+            </div>
+            <div class="form-status" id="addListingStatus" style="margin-top:.85rem;text-align:left"></div>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- ═══════════ TAB: TEAM ═══════════ -->
+      <div class="admin-panel" id="tab-team">
+        <div class="admin-form-section">
+          <h3><i class="ti ti-users" style="color:var(--purple);margin-right:6px"></i>Team Members</h3>
+          <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:1.25rem;line-height:1.6">
+            Manage who appears on the "About" page. Add a photo for any
+            member, or leave it blank to show their initials instead — both
+            look intentional, so there's no rush to add photos for everyone
+            at once.
+          </p>
+          <div id="teamAdminList" style="display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem">
+            <!-- Populated by renderTeamAdminList() in admin script below -->
+          </div>
+        </div>
+
+        <div class="admin-form-section">
+          <h3><i class="ti ti-user-plus" style="color:var(--purple);margin-right:6px"></i>Add Team Member</h3>
+          <form id="addTeamForm" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="tm-name">Full Name <span class="req">*</span></label>
+                <input type="text" id="tm-name" name="name" placeholder="e.g. Akello Susan" required />
+              </div>
+              <div class="form-group">
+                <label for="tm-role">Role / Title</label>
+                <input type="text" id="tm-role" name="role" placeholder="e.g. Property Consultant" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="tm-bio">Short Bio</label>
+              <textarea id="tm-bio" name="bio" rows="2" placeholder="A sentence or two about their role…"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Photo (optional)</label>
+              <div class="photo-upload-area" id="teamPhotoUploadArea"
+                   onclick="document.getElementById('teamPhotoFileInput').click()">
+                <i class="ti ti-photo-plus"></i>
+                <p>Click to add a photo<br />
+                   <span style="font-size:.72rem;color:var(--purple)">JPG, PNG, WEBP — leave blank for initials avatar</span>
+                </p>
+                <input type="file" id="teamPhotoFileInput" accept="image/*" />
+              </div>
+              <div class="photo-preview-grid" id="teamPhotoPreviewGrid"></div>
+            </div>
+            <button type="submit" class="btn btn--primary">
+              <i class="ti ti-plus"></i> Add Team Member
+            </button>
+            <div class="form-status" id="addTeamStatus" style="margin-top:.85rem;text-align:left"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ═══════════ TAB: INBOX ═══════════ -->
+      <div class="admin-panel" id="tab-inbox">
+        <div class="admin-form-section">
+          <h3><i class="ti ti-mail" style="color:var(--purple);margin-right:6px"></i>
+            Client Messages
+          </h3>
+
+          <!-- Explanation note for admin — email notifications now live entirely in Netlify -->
+          <div class="inbox-notice">
+            <i class="ti ti-info-circle"></i>
+            <div>
+              <strong>How messages reach you:</strong><br />
+              Messages submitted on <em>this browser</em> appear below instantly, sorted into
+              <strong>Contact</strong>, <strong>Reviews</strong>, and <strong>Enquiry</strong>.
+            </div>
+          </div>
+
+          <!-- Category filter pills (fix: Contact / Reviews / Enquiry) -->
+          <div class="inbox-cats" id="inboxCats">
+            <button class="inbox-cat-btn active" data-cat="all" onclick="setInboxFilter('all')">
+              <i class="ti ti-inbox"></i> All <span class="cat-count" id="catCount-all">0</span>
+            </button>
+            <button class="inbox-cat-btn" data-cat="contact" onclick="setInboxFilter('contact')">
+              <i class="ti ti-message"></i> Contact <span class="cat-count" id="catCount-contact">0</span>
+            </button>
+            <button class="inbox-cat-btn" data-cat="reviews" onclick="setInboxFilter('reviews')">
+              <i class="ti ti-star"></i> Reviews <span class="cat-count" id="catCount-reviews">0</span>
+            </button>
+            <button class="inbox-cat-btn" data-cat="enquiry" onclick="setInboxFilter('enquiry')">
+              <i class="ti ti-home-search"></i> Enquiry <span class="cat-count" id="catCount-enquiry">0</span>
+            </button>
+          </div>
+
+          <div class="inbox-toolbar">
+            <button class="btn btn--outline" style="font-size:.82rem"
+              onclick="markAllReadAndRender()">
+              <i class="ti ti-check"></i> Mark All Read
+            </button>
+            <button class="btn btn--outline" style="font-size:.82rem"
+              onclick="clearAllMessages()">
+              <i class="ti ti-trash"></i> Delete All
+            </button>
+            <span style="font-size:.8rem;color:var(--text-muted);margin-left:auto"
+                  id="inboxCountNote"></span>
+          </div>
+
+          <div class="inbox-list" id="inboxList">
+            <!-- Rendered by renderInbox() in main.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ TAB: MY ACCOUNT ═══════════ -->
+      <div class="admin-panel" id="tab-account">
+        <div class="admin-form-section">
+          <h3><i class="ti ti-user-cog" style="color:var(--purple);margin-right:6px"></i>My Account</h3>
+
+          <div class="account-section">
+            <p style="font-size:.88rem;color:var(--text-mid);margin-bottom:1rem;line-height:1.65">
+              Your admin login is managed securely by Supabase Auth. Your account
+              email below is your sign-in identity — update your password here at any time.
+            </p>
+
+            <div class="inbox-notice" style="margin-bottom:1.5rem">
+              <i class="ti ti-cloud-check"></i>
+              <div>
+                <strong>Synced everywhere:</strong> Your credentials, listings, and messages
+                are stored centrally in Supabase — not in this browser. Sign in from any device,
+                anywhere in the world, and everything stays perfectly in sync automatically.
+              </div>
+            </div>
+
+            <form id="accountForm" novalidate>
+
+              <div class="form-group">
+                <label for="ac-username">Account Email</label>
+                <input type="email" id="ac-username" name="username" readonly
+                  style="background:var(--off-white);cursor:not-allowed" />
+                <span class="field-hint">This is your sign-in email, managed by Supabase Auth. Contact your developer to change it.</span>
+              </div>
+
+              <div class="form-group" style="display:none">
+                <input type="hidden" id="ac-email" name="email" />
+              </div>
+
+              <div style="border-top:1px solid var(--silver-light);margin:1.25rem 0;padding-top:1.25rem">
+                <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:1rem">
+                  Enter a new password below to change it. Leave blank to keep your current password.
+                </p>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="ac-newpass">New Password</label>
+                  <div style="position:relative">
+                    <input type="password" id="ac-newpass" name="new_password"
+                      placeholder="At least 8 characters"
+                      oninput="checkPwStrength(this.value)" />
+                    <button type="button"
+                      style="position:absolute;right:.85rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem"
+                      onclick="togglePw('ac-newpass',this)">
+                      <i class="ti ti-eye"></i>
+                    </button>
+                  </div>
+                  <div class="pw-strength" id="pwStrengthBar"></div>
+                  <div class="pw-strength-label" id="pwStrengthLabel"></div>
+                </div>
+                <div class="form-group">
+                  <label for="ac-confirm">Confirm New Password</label>
+                  <input type="password" id="ac-confirm" name="confirm_password"
+                    placeholder="Re-enter new password" />
+                </div>
+              </div>
+
+              <div class="form-status" id="accountStatus"
+                style="text-align:left;margin-bottom:.85rem"></div>
+
+              <button type="submit" class="btn btn--primary">
+                <i class="ti ti-device-floppy"></i> Update Password
+              </button>
+            </form>
+          </div>
+
+          <!-- Security info — password reset is now handled natively by Supabase Auth -->
+          <div style="margin-top:2rem;padding-top:1.75rem;border-top:1px solid var(--silver-light)">
+            <h4 style="font-family:var(--font-serif);font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:.4rem">
+              <i class="ti ti-shield-lock" style="color:var(--purple);margin-right:6px"></i>Password Reset
+            </h4>
+            <div class="inbox-notice" style="margin-bottom:0">
+              <i class="ti ti-info-circle"></i>
+              <div style="font-size:.82rem;line-height:1.6">
+                Password resets are handled securely by Supabase Auth. If you forget your
+                password, use the <strong>"Forgot password?"</strong> link on the login page —
+                a secure reset link will be emailed to your account address automatically.
+                No manual email configuration is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ TAB: SETTINGS ═══════════ -->
+      <!-- ═══════════ TAB: ADMINS ═══════════ -->
+      <div class="admin-panel" id="tab-admins">
+
+        <!-- Current admins list -->
+        <div class="admin-form-section" style="margin-bottom:1.75rem">
+          <h3><i class="ti ti-shield-lock" style="color:var(--purple);margin-right:6px"></i>Admin Accounts</h3>
+          <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:1.25rem;line-height:1.6">
+            All accounts that can log in to this admin dashboard.
+            You cannot delete your own account.
+          </p>
+          <div id="adminUsersList" style="display:flex;flex-direction:column;gap:.75rem">
+            <p style="font-size:.85rem;color:var(--text-muted)">Loading…</p>
+          </div>
+        </div>
+
+        <!-- Add new admin form -->
+        <div class="admin-form-section">
+          <h3><i class="ti ti-user-plus" style="color:var(--purple);margin-right:6px"></i>Add New Admin</h3>
+          <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:1.25rem;line-height:1.6">
+            The new admin can log in immediately with these credentials.
+            Share the password securely (e.g. via WhatsApp, not email).
+          </p>
+          <!-- Not a real <form> — avoids Netlify Forms pickup; handled via JS -->
+          <div id="addAdminForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Email Address *</label>
+                <input type="email" id="newAdminEmail" class="form-input"
+                       placeholder="newadmin@example.com" autocomplete="off" />
+              </div>
+            </div>
+            <div class="form-row" style="grid-template-columns:1fr 1fr;gap:1rem;display:grid">
+              <div class="form-group">
+                <label class="form-label">Password *</label>
+                <input type="password" id="newAdminPassword" class="form-input"
+                       placeholder="Min. 8 characters" autocomplete="new-password" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Confirm Password *</label>
+                <input type="password" id="newAdminPasswordConfirm" class="form-input"
+                       placeholder="Repeat password" autocomplete="new-password" />
+              </div>
+            </div>
+            <button class="btn btn--primary" id="addAdminBtn" onclick="handleAddAdmin()">
+              <i class="ti ti-user-plus"></i> Add Admin
+            </button>
+            <p class="form-status" id="addAdminStatus" style="margin-top:.85rem;text-align:left"></p>
+          </div>
+        </div>
+
+        <!-- Setup notice -->
+        <div id="adminFunctionNotice" style="display:none;margin-top:1.25rem">
+          <div style="background:var(--purple-pale);border:1px solid var(--purple-light);border-radius:var(--radius-md);padding:1.25rem;font-size:.85rem;line-height:1.7;color:var(--text-mid)">
+            <strong style="color:var(--purple)"><i class="ti ti-info-circle"></i> One-time setup required</strong><br/>
+            The Admins tab uses a secure Netlify Function that needs two
+            environment variables set in your Netlify dashboard before it works:<br/><br/>
+            <strong>Netlify → Site → Environment Variables → Add:</strong><br/>
+            &nbsp;&nbsp;<code style="background:var(--white);padding:2px 6px;border-radius:4px">SUPABASE_URL</code> — your Supabase project URL<br/>
+            &nbsp;&nbsp;<code style="background:var(--white);padding:2px 6px;border-radius:4px">SUPABASE_SERVICE_ROLE_KEY</code> — from Supabase → Project Settings → API<br/>
+            &nbsp;&nbsp;<code style="background:var(--white);padding:2px 6px;border-radius:4px">SITE_URL</code> — your live site URL (e.g. https://kerproperties.netlify.app)<br/><br/>
+            Then redeploy and this tab will work fully.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═══════════ TAB: SETTINGS ═══════════ -->
+      <div class="admin-panel" id="tab-settings">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem">
+
+
+          <!-- Quick links -->
+          <div class="admin-form-section" style="margin-bottom:0">
+            <h3><i class="ti ti-link" style="color:var(--purple);margin-right:6px"></i>Quick Links</h3>
+            <ul style="display:flex;flex-direction:column;gap:.75rem;margin-top:.5rem">
+              <li><a href="index.html" target="_blank"
+                style="font-size:.875rem;color:var(--purple);display:flex;align-items:center;gap:6px">
+                <i class="ti ti-external-link"></i> Home Page</a></li>
+              <li><a href="properties.html" target="_blank"
+                style="font-size:.875rem;color:var(--purple);display:flex;align-items:center;gap:6px">
+                <i class="ti ti-external-link"></i> Properties Page</a></li>
+              <li><a href="contact.html" target="_blank"
+                style="font-size:.875rem;color:var(--purple);display:flex;align-items:center;gap:6px">
+                <i class="ti ti-external-link"></i> Contact Page</a></li>
+            </ul>
+          </div>
+
+          <!-- Data sync (first-time Supabase setup) -->
+          <div class="admin-form-section" style="margin-bottom:0">
+            <h3><i class="ti ti-cloud-upload" style="color:var(--purple);margin-right:6px"></i>Data Sync</h3>
+            <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:1rem;line-height:1.6">
+              If your listings table is empty (first-time setup), load the
+              original 14 starter listings into Supabase.
+            </p>
+            <button class="btn btn--outline btn--full" id="seedListingsBtn" onclick="handleSeedListings()">
+              <i class="ti ti-database-import"></i> Seed Starter Listings
+            </button>
+            <p class="form-status" id="seedStatus" style="margin-top:.6rem"></p>
+          </div>
+
+          <!-- Danger zone -->
+          <div class="admin-form-section"
+            style="margin-bottom:0;background:var(--red-bg);border-color:rgba(155,28,28,.15)">
+            <h3 style="color:var(--red-tag)">
+              <i class="ti ti-alert-triangle" style="margin-right:6px"></i>Danger Zone
+            </h3>
+            <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:1rem;line-height:1.6">
+              <strong>Delete all listings</strong> — removes every property permanently.
+              Nothing will remain unless added manually.
+            </p>
+            <button class="btn btn--danger btn--full" onclick="resetAllListings()"
+              style="margin-bottom:1rem">
+              <i class="ti ti-trash"></i> Delete ALL Listings
+            </button>
+            <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:.75rem;line-height:1.6">
+              Sign out of the admin session.
+            </p>
+            <button class="btn btn--outline btn--full" onclick="handleLogout()">
+              <i class="ti ti-logout"></i> Sign Out
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div class="footer__brand">
+        <a href="index.html" class="footer__logo">
+          <img src="kpLogo-icon-white.png" alt="Ker Properties" />
+          <div class="logo-wordmark">
+            <span class="logo-text">Ker</span>
+            <span class="logo-sub">Properties</span>
+          </div>
+        </a>
+        <p class="footer__desc">Trusted land and housing services across all districts of Uganda.</p>
+        <div class="footer__socials">
+          <a href="https://facebook.com/YOUR_PAGE" target="_blank" rel="noopener"
+             class="social-link" aria-label="Facebook"><i class="ti ti-brand-facebook"></i></a>
+          <a href="https://wa.me/2567XXXXXXXX" target="_blank" rel="noopener"
+             class="social-link" aria-label="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>
+          <a href="https://instagram.com/YOUR_HANDLE" target="_blank" rel="noopener"
+             class="social-link" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+          <a href="https://linkedin.com/company/YOUR_PAGE" target="_blank" rel="noopener"
+             class="social-link" aria-label="LinkedIn"><i class="ti ti-brand-linkedin"></i></a>
+          <a href="https://tiktok.com/@YOUR_HANDLE" target="_blank" rel="noopener"
+             class="social-link" aria-label="TikTok"><i class="ti ti-brand-tiktok"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Quick Links</h4>
+        <ul class="footer__list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="properties.html">Properties</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="testimonies.html">Testimonies</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Services</h4>
+        <ul class="footer__list">
+          <li><a href="properties.html?type=land">Land for Sale</a></li>
+          <li><a href="properties.html?type=rent">Houses for Rent</a></li>
+          <li><a href="about.html#services">Property Consultation</a></li>
+          <li><a href="about.html#services">Site Visits</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer__heading">Contact</h4>
+        <ul class="footer__list footer__list--plain">
+          <li><i class="ti ti-map-pin"></i> Gulu City, Uganda</li>
+          <li><i class="ti ti-clock"></i> Mon–Sat: 8 am – 6 pm</li>
+          <li><i class="ti ti-phone"></i> +256 7XX XXX XXX</li>
+          <li><i class="ti ti-mail"></i> info@kerproperties.ug</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="container footer__bottom-inner">
+        <span>&copy; 2026 Ker Properties. All rights reserved.</span>
+        <span>Serving all districts of Uganda 🇺🇬</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="ti ti-arrow-up"></i>
+  </button>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabase.js"></script>
+  <script src="main.js"></script>
+  <script>
+    /* ════════════════════════════════
+       ADMIN PAGE SCRIPT
+       (runs after main.js)
+       ════════════════════════════════ */
+
+    /* Auth guard: kpRequireAdmin() runs inside initAdmin() in main.js
+       on DOMContentLoaded and verifies the real Supabase session before
+       any admin data loads or renders. No separate guard needed here. */
+
+    /* ── Tab switching ── */
+    document.querySelectorAll(".admin-tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        const restricted = ["team", "admins", "settings"];
+        if (window._kpAdminRole !== "main" && restricted.includes(tab.dataset.tab)) {
+          showToast("Only the Main Admin can access this.");
+          return;
+        }
+        document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
+        document.querySelectorAll(".admin-panel").forEach(p => p.classList.remove("active"));
+        tab.classList.add("active");
+        document.getElementById("tab-" + tab.dataset.tab)?.classList.add("active");
+        if (tab.dataset.tab === "inbox")   { renderInbox(); renderAdminTable(); }
+        if (tab.dataset.tab === "team")    { renderTeamAdminList(); }
+        if (tab.dataset.tab === "admins")  { loadAdminUsers(); }
+      });
+    });
+
+    /* ── Seed starter listings (first-time setup) ── */
+    async function handleSeedListings() {
+      const btn    = document.getElementById("seedListingsBtn");
+      const status = document.getElementById("seedStatus");
+      const existing = await getListings();
+      if (existing && existing.length > 0) {
+        if (!confirm(`You already have ${existing.length} listing(s). Seed anyway? This will ADD the 14 starter listings alongside your existing ones.`)) return;
+      }
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader-2 ti-spin"></i> Seeding…'; }
+      if (status) { status.textContent = ""; status.className = "form-status"; }
+      try {
+        await kpSeedDefaultListings(DEFAULT_LISTINGS);
+        _bustListingCache();
+        await renderAdminTable();
+        if (status) { status.textContent = "✓ Starter listings added."; status.className = "form-status success"; }
+        showToast("Starter listings seeded!");
+      } catch (err) {
+        if (status) { status.textContent = `Error: ${err.message || err}`; status.className = "form-status error"; }
+      } finally {
+        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="ti ti-database-import"></i> Seed Starter Listings'; }
+      }
+    }
+    window.handleSeedListings = handleSeedListings;
+
+    /* Logout is handled by handleLogout() in main.js via Supabase Auth signOut */
+
+    /* ── Filter table ── */
+    function filterAdminTable() {
+      const q      = (document.getElementById("adminSearchInput")?.value || "").toLowerCase();
+      const type   = document.getElementById("adminTypeFilter")?.value   || "all";
+      const status = document.getElementById("adminStatusFilter")?.value || "all";
+      let visible  = 0;
+      document.querySelectorAll("#adminTableBody tr[data-id]").forEach(row => {
+        const matchQ = !q || row.dataset.title?.includes(q) || row.dataset.location?.includes(q);
+        const matchT = type === "all"
+          || row.dataset.type === type
+          || (type === "land" && (row.dataset.type === "land-sale" || row.dataset.type === "land-rent"))
+          || (type === "rent" && (row.dataset.type === "house-rent" || row.dataset.type === "house-sale"));
+        const matchS = status === "all" || row.dataset.status === status;
+        const show   = matchQ && matchT && matchS;
+        row.style.display = show ? "" : "none";
+        if (show) visible++;
+      });
+      const empty = document.getElementById("adminTableEmpty");
+      if (empty) empty.style.display = visible === 0 ? "" : "none";
+    }
+    window.filterAdminTable = filterAdminTable;
+
+    /* ── Photo upload ── */
+    let pendingPhotos = [];
+
+    function clearPhotoPreview() {
+      pendingPhotos = [];
+      document.getElementById("photoPreviewGrid").innerHTML = "";
+      document.getElementById("photoCountNote").textContent = "";
+      document.getElementById("photoFileInput").value = "";
+    }
+    window.clearPhotoPreview = clearPhotoPreview;
+
+    function renderPhotoThumbs() {
+      const grid = document.getElementById("photoPreviewGrid");
+      const note = document.getElementById("photoCountNote");
+      grid.innerHTML = pendingPhotos.map((src, i) => `
+        <div class="photo-thumb">
+          <img src="${src}" alt="Photo ${i+1}" />
+          <button class="photo-thumb__del" onclick="removePhoto(${i})" title="Remove">
+            <i class="ti ti-x"></i>
+          </button>
+        </div>`
+      ).join("");
+      note.textContent = pendingPhotos.length > 0
+        ? `${pendingPhotos.length} photo${pendingPhotos.length !== 1 ? "s" : ""} selected`
+        : "";
+    }
+
+    function removePhoto(idx) {
+      pendingPhotos.splice(idx, 1);
+      renderPhotoThumbs();
+    }
+    window.removePhoto = removePhoto;
+
+    document.getElementById("photoFileInput")?.addEventListener("change", function() {
+      const files     = Array.from(this.files);
+      const remaining = 10 - pendingPhotos.length;
+      const toAdd     = files.slice(0, remaining);
+      if (files.length > remaining) showToast(`Max 10 photos. Only first ${remaining} added.`);
+      let loaded = 0;
+      toAdd.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          pendingPhotos.push(e.target.result);
+          loaded++;
+          if (loaded === toAdd.length) renderPhotoThumbs();
+        };
+        reader.readAsDataURL(file);
+      });
+      this.value = "";
+    });
+
+    const uploadArea = document.getElementById("photoUploadArea");
+    uploadArea?.addEventListener("dragover", e => { e.preventDefault(); uploadArea.style.borderColor = "var(--navy)"; });
+    uploadArea?.addEventListener("dragleave", () => { uploadArea.style.borderColor = ""; });
+    uploadArea?.addEventListener("drop", e => {
+      e.preventDefault();
+      uploadArea.style.borderColor = "";
+      const files     = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith("image/"));
+      const remaining = 10 - pendingPhotos.length;
+      files.slice(0, remaining).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = ev => { pendingPhotos.push(ev.target.result); renderPhotoThumbs(); };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    
+    document.getElementById("addListingForm")?.addEventListener("submit", async e => {
+      e.preventDefault();
+      const f        = e.target;
+      const type     = f.querySelector('[name="type"]').value;
+      const rawFeats = f.querySelector('[name="features"]').value;
+      const features = rawFeats.split(",").map(s => s.trim()).filter(Boolean);
+      const landIcons = ["ti-ruler","ti-certificate","ti-road","ti-mountain","ti-droplet"];
+      const rentIcons = ["ti-bed","ti-bath","ti-car","ti-bolt","ti-home"];
+
+      const addBtn = f.querySelector('[type="submit"]');
+      const status = document.getElementById("addListingStatus");
+      if (addBtn) { addBtn.disabled = true; addBtn.innerHTML = '<i class="ti ti-loader-2 ti-spin"></i> Saving…'; }
+
+      /* Upload photos to Supabase Storage */
+      let uploadedPhotos = [];
+      if (pendingPhotos.length > 0) {
+        if (status) { status.textContent = "Uploading photos…"; status.className = "form-status"; }
+        for (const dataUrl of pendingPhotos) {
+          const url = await kpUploadBase64Photo(dataUrl, "listings");
+          if (url) uploadedPhotos.push(url);
+        }
+      }
+
+      const newListing = {
+        type,
+        title:         f.querySelector('[name="title"]').value.trim(),
+        location:      f.querySelector('[name="location"]').value.trim(),
+        location_key:  f.querySelector('[name="locationKey"]').value,
+        price:         parseInt(f.querySelector('[name="price"]').value, 10) || 0,
+        price_label:   f.querySelector('[name="priceLabel"]').value.trim(),
+        price_note:    f.querySelector('[name="priceNote"]').value.trim() || "Contact for details",
+        features,
+        feature_icons: features.map((_, i) => (type === 'land-sale' || type === 'land-rent') ? (landIcons[i] || 'ti-check') : (rentIcons[i] || 'ti-check')),
+        description:   f.querySelector('[name="description"]').value.trim(),
+        photos:        uploadedPhotos,
+        available:     true,
+        featured:      f.querySelector('[name="featured"]').checked
+      };
+
+      const { data, error } = await kpAddListing(newListing);
+
+      if (addBtn) { addBtn.disabled = false; addBtn.innerHTML = '<i class="ti ti-plus"></i> Add Listing'; }
+
+      if (error) {
+        if (status) { status.textContent = `Error: ${error}`; status.className = "form-status error"; }
+        return;
+      }
+
+      _bustListingCache();
+      f.reset();
+      clearPhotoPreview();
+
+      if (status) {
+        status.textContent = `✓ "${newListing.title}" added successfully!`;
+        status.className   = "form-status success";
+        setTimeout(() => { status.textContent = ""; status.className = "form-status"; }, 4000);
+      }
+
+      document.querySelector('[data-tab="listings"]')?.click();
+      await renderAdminTable();
+      showToast("Listing added!");
+    });
+
+    /* ── Team management ── */
+    let teamPendingPhoto = null; /* base64 preview for the add-member form */
+
+    async function renderTeamAdminList() {
+      const container = document.getElementById("teamAdminList");
+      if (!container) return;
+      const team = await kpGetTeam();
+      if (team.length === 0) {
+        container.innerHTML = `<p style="font-size:.85rem;color:var(--text-muted)">No team members yet — add one below.</p>`;
+        return;
+      }
+      container.innerHTML = team.map(m => `
+        <div style="display:flex;gap:1rem;align-items:center;padding:1rem;border:1px solid var(--silver-light);border-radius:var(--radius-md);background:var(--off-white)">
+          <div style="width:56px;height:56px;border-radius:50%;flex-shrink:0;overflow:hidden;
+            background:linear-gradient(135deg,var(--purple-deep),var(--purple-mid));
+            display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-family:var(--font-serif)">
+            ${m.photo_url ? `<img src="${m.photo_url}" alt="${m.name}" style="width:100%;height:100%;object-fit:cover" />` : (m.name || "").split(/\s+/).map(p=>p[0]).join("").slice(0,2).toUpperCase()}
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;font-size:.92rem">${m.name}</div>
+            <div style="font-size:.78rem;color:var(--purple)">${m.role || ""}</div>
+          </div>
+          <div style="display:flex;gap:.4rem;flex-shrink:0">
+            <label class="btn btn--outline" style="padding:.35rem .65rem;font-size:.72rem;cursor:pointer;margin:0">
+              <i class="ti ti-photo"></i> Photo
+              <input type="file" accept="image/*" style="display:none" onchange="teamReplacePhoto(${m.id}, this)" />
+            </label>
+            <button class="btn btn--danger" style="padding:.35rem .65rem;font-size:.72rem" onclick="teamDeleteMember(${m.id})">
+              <i class="ti ti-trash"></i>
+            </button>
+          </div>
+        </div>`
+      ).join("");
+    }
+    window.renderTeamAdminList = renderTeamAdminList;
+
+    async function teamReplacePhoto(id, input) {
+      const file = input.files[0];
+      if (!file) return;
+      showToast("Uploading photo…");
+      const url = await kpUploadPhoto(file, "team");
+      if (!url) { showToast("Photo upload failed."); return; }
+      const { error } = await kpUpdateTeamMember(id, { photo_url: url });
+      if (error) { showToast("Error: " + error); return; }
+      await renderTeamAdminList();
+      await renderTeamGrid();
+      showToast("Photo updated!");
+    }
+    window.teamReplacePhoto = teamReplacePhoto;
+
+    async function teamDeleteMember(id) {
+      if (!confirm("Remove this team member from the About page?")) return;
+      const { error } = await kpDeleteTeamMember(id);
+      if (error) { showToast("Error: " + error); return; }
+      await renderTeamAdminList();
+      await renderTeamGrid();
+      showToast("Team member removed.");
+    }
+    window.teamDeleteMember = teamDeleteMember;
+
+    document.getElementById("teamPhotoFileInput")?.addEventListener("change", function() {
+      const file = this.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        teamPendingPhoto = e.target.result;
+        const grid = document.getElementById("teamPhotoPreviewGrid");
+        if (grid) grid.innerHTML = `
+          <div class="photo-thumb">
+            <img src="${teamPendingPhoto}" alt="Preview" />
+            <button class="photo-thumb__del" type="button" onclick="teamClearPendingPhoto()" title="Remove">
+              <i class="ti ti-x"></i>
+            </button>
+          </div>`;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function teamClearPendingPhoto() {
+      teamPendingPhoto = null;
+      const grid = document.getElementById("teamPhotoPreviewGrid");
+      if (grid) grid.innerHTML = "";
+      const input = document.getElementById("teamPhotoFileInput");
+      if (input) input.value = "";
+    }
+    window.teamClearPendingPhoto = teamClearPendingPhoto;
+
+    document.getElementById("addTeamForm")?.addEventListener("submit", async e => {
+      e.preventDefault();
+      const f      = e.target;
+      const status = document.getElementById("addTeamStatus");
+      const btn    = f.querySelector('[type="submit"]');
+      const name   = f.querySelector('[name="name"]').value.trim();
+      if (!name) {
+        if (status) { status.textContent = "Name is required."; status.className = "form-status error"; }
+        return;
+      }
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader-2 ti-spin"></i> Saving…'; }
+
+      let photoUrl = null;
+      if (teamPendingPhoto) {
+        if (status) { status.textContent = "Uploading photo…"; status.className = "form-status"; }
+        photoUrl = await kpUploadBase64Photo(teamPendingPhoto, "team");
+      }
+
+      const { error } = await kpAddTeamMember({
+        name,
+        role:      f.querySelector('[name="role"]').value.trim(),
+        bio:       f.querySelector('[name="bio"]').value.trim(),
+        photo_url: photoUrl,
+        sort_order: 999,
+      });
+
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="ti ti-plus"></i> Add Team Member'; }
+
+      if (error) {
+        if (status) { status.textContent = `Error: ${error}`; status.className = "form-status error"; }
+        return;
+      }
+
+      f.reset();
+      teamClearPendingPhoto();
+      if (status) {
+        status.textContent = `✓ "${name}" added to the team.`;
+        status.className   = "form-status success";
+        setTimeout(() => { status.textContent = ""; status.className = "form-status"; }, 4000);
+      }
+      await renderTeamAdminList();
+      await renderTeamGrid();
+      showToast("Team member added!");
+    });
+
+    /* ── Inbox helpers ── */
+    async function markAllReadAndRender() {
+      await kpMarkAllRead();
+      await renderInbox();
+      await renderAdminTable();
+      showToast("All messages marked as read.");
+    }
+    async function clearAllMessages() {
+      if (!confirm("Delete ALL messages? This cannot be undone.")) return;
+      await kpDeleteAllMessages();
+      await renderInbox();
+      await renderAdminTable();
+      showToast("All messages deleted.");
+    }
+    window.markAllReadAndRender = markAllReadAndRender;
+    window.clearAllMessages     = clearAllMessages;
+
+    function togglePw(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      const hidden = input.type === "password";
+      input.type   = hidden ? "text" : "password";
+      btn.querySelector("i").className = hidden ? "ti ti-eye-off" : "ti ti-eye";
+    }
+    window.togglePw = togglePw;
+
+    function checkPwStrength(pw) {
+      const bar   = document.getElementById("pwStrengthBar");
+      const label = document.getElementById("pwStrengthLabel");
+      if (!bar || !label) return;
+      if (!pw) { bar.className = "pw-strength"; bar.style.width = "0"; label.textContent = ""; return; }
+      const strong = pw.length >= 10 && /[A-Z]/.test(pw) && /[0-9]/.test(pw) && /[^A-Za-z0-9]/.test(pw);
+      const fair   = pw.length >= 6;
+      if (strong) { bar.className = "pw-strength strong"; label.textContent = "Strong password ✓"; }
+      else if (fair) { bar.className = "pw-strength fair"; label.textContent = "Fair — add numbers or symbols"; }
+      else { bar.className = "pw-strength weak"; label.textContent = "Too short — minimum 6 characters"; }
+    }
+    window.checkPwStrength = checkPwStrength;
+
+    /* Account form — now only handles password change via Supabase Auth.
+       Username/email are the Supabase Auth email; phone is informational. */
+    document.getElementById("accountForm")?.addEventListener("submit", async e => {
+      e.preventDefault();
+      const f        = e.target;
+      const newPw    = f.querySelector('[name="new_password"]').value;
+      const confirmPw= f.querySelector('[name="confirm_password"]').value;
+      const status   = document.getElementById("accountStatus");
+      const saveBtn  = f.querySelector('[type="submit"]');
+
+      if (!newPw) {
+        status.textContent = "Enter a new password to update it.";
+        status.className   = "form-status error";
+        return;
+      }
+      if (newPw.length < 8) {
+        status.textContent = "Password must be at least 8 characters.";
+        status.className   = "form-status error";
+        return;
+      }
+      if (newPw !== confirmPw) {
+        status.textContent = "Passwords do not match.";
+        status.className   = "form-status error";
+        return;
+      }
+
+      if (saveBtn) { saveBtn.disabled = true; saveBtn.innerHTML = '<i class="ti ti-loader-2 ti-spin"></i> Updating…'; }
+
+      const { error } = await kpUpdatePassword(newPw);
+      if (saveBtn) { saveBtn.disabled = false; saveBtn.innerHTML = '<i class="ti ti-device-floppy"></i> Update Password'; }
+
+      if (error) {
+        status.textContent = `Error: ${error}`;
+        status.className   = "form-status error";
+      } else {
+        f.querySelector('[name="new_password"]').value     = "";
+        f.querySelector('[name="confirm_password"]').value = "";
+        checkPwStrength("");
+        status.textContent = "✓ Password updated successfully via Supabase.";
+        status.className   = "form-status success";
+        showToast("Password updated!");
+        setTimeout(() => { status.textContent = ""; status.className = "form-status"; }, 5000);
+      }
+    });
+
+    /* Load current user email into the account form */
+    document.addEventListener("DOMContentLoaded", async () => {
+      const user = await kpGetUser();
+      if (user) {
+        const acEmail = document.getElementById("ac-email");
+        const acUsername = document.getElementById("ac-username");
+        if (acEmail)    acEmail.value    = user.email || "";
+        if (acUsername) acUsername.value = user.email || "";
+      }
+    });
+
+    /* Send a test code to the admin's recovery email */
+
+    /* ══════════════════════════════════════════════════════
+       ADMIN USER MANAGEMENT
+       Calls /.netlify/functions/admin-users (serverless).
+       The service_role key never touches the browser.
+       ══════════════════════════════════════════════════════ */
+
+    const ADMIN_FN = "/.netlify/functions/admin-users";
+
+    /** Get the current session JWT to authenticate function calls */
+    async function _getAuthToken() {
+      const sb = getSupabase();
+      if (!sb) return null;
+      const { data } = await sb.auth.getSession();
+      return data?.session?.access_token || null;
+    }
+
+    /** Call the admin-users Netlify function */
+    async function _callAdminFn(action, params = {}) {
+      const token = await _getAuthToken();
+      if (!token) return { error: "Not signed in" };
+      try {
+        const res = await fetch(ADMIN_FN, {
+          method:  "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+          body:    JSON.stringify({ action, ...params }),
+        });
+        const json = await res.json();
+        if (!res.ok) return { error: json.error || `Server error (${res.status})` };
+        return json;
+      } catch (err) {
+        /* Network error or function not deployed yet */
+        if (err.message?.includes("Failed to fetch") || err.message?.includes("NetworkError")) {
+          return { error: "FUNCTION_NOT_DEPLOYED" };
+        }
+        return { error: err.message || "Unknown error" };
+      }
+    }
+
+    /** Load and render the list of all admin accounts */
+    async function loadAdminUsers() {
+      const list   = document.getElementById("adminUsersList");
+      const notice = document.getElementById("adminFunctionNotice");
+      if (!list) return;
+      list.innerHTML = `<p style="font-size:.85rem;color:var(--text-muted)"><i class="ti ti-loader-2 ti-spin"></i> Loading…</p>`;
+
+      const result = await _callAdminFn("list");
+
+      if (result.error === "FUNCTION_NOT_DEPLOYED") {
+        list.innerHTML = `<p style="font-size:.85rem;color:var(--text-muted)">Set up the environment variables below to enable this feature.</p>`;
+        if (notice) notice.style.display = "block";
+        return;
+      }
+
+      if (notice) notice.style.display = "none";
+
+      if (result.error) {
+        list.innerHTML = `<p style="font-size:.85rem;color:var(--red-tag)"><i class="ti ti-alert-circle"></i> ${escapeHtml(result.error)}</p>`;
+        return;
+      }
+
+      const users = result.users || [];
+      if (users.length === 0) {
+        list.innerHTML = `<p style="font-size:.85rem;color:var(--text-muted)">No admin accounts found.</p>`;
+        return;
+      }
+
+      list.innerHTML = users.map(u => `
+        <div style="display:flex;align-items:center;gap:1rem;padding:.85rem 1rem;
+                    background:var(--off-white);border:1px solid var(--silver-light);
+                    border-radius:var(--radius-md)">
+          <div style="width:38px;height:38px;border-radius:50%;background:var(--purple-pale);
+                      display:flex;align-items:center;justify-content:center;
+                      color:var(--purple);font-weight:700;font-size:.85rem;flex-shrink:0">
+            ${escapeHtml((u.email || "?")[0].toUpperCase())}
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:.9rem;font-weight:600;color:var(--text-dark)">
+              ${escapeHtml(u.email)}
+              ${u.role === "main"
+                ? `<span style="font-size:.72rem;background:var(--gold);color:#fff;
+                             padding:2px 8px;border-radius:20px;margin-left:6px;font-weight:600">Main Admin</span>`
+                : ""}
+              ${u.isSelf ? `<span style="font-size:.72rem;background:var(--purple-pale);color:var(--purple);
+                             padding:2px 8px;border-radius:20px;margin-left:6px;font-weight:500">You</span>` : ""}
+            </div>
+            <div style="font-size:.75rem;color:var(--text-muted);margin-top:2px">
+              Added ${new Date(u.created_at).toLocaleDateString("en-UG", { day:"numeric", month:"short", year:"numeric" })}
+              ${u.last_sign_in_at
+                ? ` · Last login ${new Date(u.last_sign_in_at).toLocaleDateString("en-UG", { day:"numeric", month:"short", year:"numeric" })}`
+                : " · Never logged in"}
+            </div>
+          </div>
+          <div style="display:flex;gap:.5rem;flex-shrink:0">
+            <button class="btn btn--outline" style="padding:.3rem .65rem;font-size:.75rem"
+                    title="Send password reset email"
+                    onclick="handleResetAdminPassword('${escapeHtml(u.email)}')">
+              <i class="ti ti-key"></i> Reset PW
+            </button>
+            ${!u.isSelf && u.role !== "main" ? `
+            <button class="btn btn--danger" style="padding:.3rem .65rem;font-size:.75rem"
+                    title="Remove this admin account"
+                    onclick="handleDeleteAdmin('${escapeHtml(u.id)}', '${escapeHtml(u.email)}')">
+              <i class="ti ti-trash"></i>
+            </button>` : ""}
+          </div>
+        </div>`
+      ).join("");
+    }
+    window.loadAdminUsers = loadAdminUsers;
+
+    /** Add a new admin account */
+    async function handleAddAdmin() {
+      const email    = document.getElementById("newAdminEmail")?.value.trim();
+      const password = document.getElementById("newAdminPassword")?.value;
+      const confirm  = document.getElementById("newAdminPasswordConfirm")?.value;
+      const status   = document.getElementById("addAdminStatus");
+      const btn      = document.getElementById("addAdminBtn");
+
+      const setStatus = (msg, type) => {
+        if (status) { status.textContent = msg; status.className = `form-status ${type}`; }
+      };
+
+      if (!email)    return setStatus("Email is required.", "error");
+      if (!password) return setStatus("Password is required.", "error");
+      if (password.length < 8) return setStatus("Password must be at least 8 characters.", "error");
+      if (password !== confirm) return setStatus("Passwords do not match.", "error");
+
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader-2 ti-spin"></i> Adding…'; }
+      setStatus("", "");
+
+      const result = await _callAdminFn("create", { email, password });
+
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="ti ti-user-plus"></i> Add Admin'; }
+
+      if (result.error === "FUNCTION_NOT_DEPLOYED") {
+        setStatus("Set up the environment variables first (see notice below).", "error");
+        document.getElementById("adminFunctionNotice").style.display = "block";
+        return;
+      }
+
+      if (result.error) {
+        setStatus(`Error: ${result.error}`, "error");
+        return;
+      }
+
+      /* Clear the form */
+      document.getElementById("newAdminEmail").value           = "";
+      document.getElementById("newAdminPassword").value        = "";
+      document.getElementById("newAdminPasswordConfirm").value = "";
+      setStatus(`✓ Admin "${email}" added successfully.`, "success");
+      setTimeout(() => { if (status) { status.textContent = ""; status.className = "form-status"; } }, 5000);
+      showToast("New admin added!");
+      await loadAdminUsers();
+    }
+    window.handleAddAdmin = handleAddAdmin;
+
+    /** Send a password reset email to an admin */
+    async function handleResetAdminPassword(email) {
+      if (!confirm(`Send a password reset email to ${email}?`)) return;
+      const result = await _callAdminFn("reset-password", { email });
+      if (result.error) {
+        showToast(`Error: ${result.error}`);
+        return;
+      }
+      showToast(`Password reset email sent to ${email}.`);
+    }
+    window.handleResetAdminPassword = handleResetAdminPassword;
+
+    /** Delete an admin account */
+    async function handleDeleteAdmin(userId, email) {
+      if (!confirm(`Remove admin "${email}"? They will immediately lose access to this dashboard.`)) return;
+      const result = await _callAdminFn("delete", { userId });
+      if (result.error) {
+        showToast(`Error: ${result.error}`);
+        return;
+      }
+      showToast(`Admin "${email}" removed.`);
+      await loadAdminUsers();
+    }
+    window.handleDeleteAdmin = handleDeleteAdmin;
+
+  </script>
+</body>
+</html>
