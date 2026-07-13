@@ -8,6 +8,12 @@
 [functions]
   directory = "netlify/functions"
 
+# ── Keep-alive: prevents Supabase's free-tier auto-pause (which triggers
+#    after 7 days of zero API activity) by pinging the database twice a
+#    week. See netlify/functions/keep-alive.js for details. ──
+[functions."keep-alive"]
+  schedule = "0 6 * * 1,4"
+
 # ── Security headers applied to every page ──
 [[headers]]
   for = "/*"
