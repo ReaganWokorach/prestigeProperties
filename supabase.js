@@ -12,8 +12,8 @@
    REST endpoint, not the project URL, and will break every request with
    errors like "Invalid path specified in request URL".
    Get the correct value from: Project Settings → API → Project URL. */
-const SUPABASE_URL  = _kpSanitizeSupabaseUrl(window.KP_SUPABASE_URL || "https://YOUR_PROJECT_ID.supabase.co");
-const SUPABASE_ANON = window.KP_SUPABASE_ANON || "YOUR_ANON_KEY_HERE";
+const SUPABASE_URL  = _kpSanitizeSupabaseUrl(window.KP_SUPABASE_URL || "https://tqivukzzvyjrjfytgddo.supabase.co");
+const SUPABASE_ANON = window.KP_SUPABASE_ANON || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxaXZ1a3p6dnlqcmpmeXRnZGRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU0MDU1MzQsImV4cCI6MjEwMDk4MTUzNH0.zmsRUDmWl4wk1UdIl8_HnJfHn2r5d6LjQG5aJDRqOao";
 
 /**
  * Strips any trailing slash and any accidentally-pasted API path
